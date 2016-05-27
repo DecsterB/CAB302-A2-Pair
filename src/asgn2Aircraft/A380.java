@@ -11,7 +11,7 @@ package asgn2Aircraft;
  * Specialisation of the {@link asgn2Aircraft.Aircraft} class for the Airbus A380-800. 
  * Default passenger capacities are based on the QANTAS four class configuration 
  * 
- * @author hogan
+ * @author Declan Barker
  *
  */
 public class A380 extends Aircraft {
@@ -43,8 +43,9 @@ public class A380 extends Aircraft {
 	 * 
 	 * @see asgn2Aircraft.Aircraft#Aircraft(String, int, int, int, int, int) 
 	 */
-	public A380(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException {
-		//Call here 
+	public A380(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException
+	{
+		super(flightCode, departureTime, first, business, premium, economy);
 		this.type = "A380";
 	}
 }
