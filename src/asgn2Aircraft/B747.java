@@ -30,8 +30,10 @@ public class B747 extends Aircraft {
 	 * @throws AircraftException if invalid parameters. 
 	 * See {@link asgn2Aircraft.Aircraft#Aircraft(String, int, int, int, int, int)}
 	 */
-	public B747(String flightCode,int departureTime) throws AircraftException {
-		//Call here 
+	public B747(String flightCode,int departureTime) throws AircraftException
+	{
+		super(flightCode, departureTime, FIRST, BUSINESS, PREMIUM, ECONOMY);
+		
 		this.type = "B747";
 	}
 
@@ -40,8 +42,10 @@ public class B747 extends Aircraft {
 	 * 
 	 * @see asgn2Aircraft.Aircraft#Aircraft(String, int, int, int, int, int) 
 	 */
-	public B747(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException {
-		//Call here 
+	public B747(String flightCode,int departureTime,int first, int business, int premium, int economy) throws AircraftException
+	{
+		super(flightCode, departureTime, first, business, premium, economy);
+		
 		this.type = "B747";
 	}
 

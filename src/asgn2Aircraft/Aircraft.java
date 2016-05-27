@@ -68,10 +68,22 @@ public abstract class Aircraft {
 	 */
 	public Aircraft(String flightCode,int departureTime, int first, int business, int premium, int economy) throws AircraftException
 	{		
-		if (flightCode.length() == 0)
+		if (flightCode == null || flightCode.isEmpty())
 		{
-			throw new AircraftException("Flight code must not be an empty string.");
+			throw new AircraftException("Flight code must be defined or not an empty string.");
 		}
+		
+		if (departureTime <= 0 || first < 0 || business < 0 || premium < 0 || economy < 0)
+		{
+			throw new AircraftException("Departure time or aircraft capacity values must be positive.");
+		}
+		
+		this.flightCode = flightCode;
+		this.departureTime = departureTime;
+		this.firstCapacity = first;
+		this.businessCapacity = business;
+		this.premiumCapacity = premium;
+		this.economyCapacity = economy;		
 		
 		this.status = "";
 	}
@@ -86,21 +98,42 @@ public abstract class Aircraft {
 	 * is invalid. See {@link asgn2Passengers.Passenger#cancelSeat(int)}
 	 * @throws AircraftException if <code>Passenger</code> is not recorded in aircraft seating 
 	 */
-	public void cancelBooking(Passenger p,int cancellationTime) throws PassengerException, AircraftException
+	public void cancelBooking(Passenger p, int cancellationTime) throws PassengerException, AircraftException
 	{
+		if (!p.isConfirmed())
+		{
+			throw new PassengerException("Passenger is not confirmed.");
+		}
+		
+		if (cancellationTime < 0)
+		{
+			throw new PassengerException("Cancellation time must be a positive number.");
+		}
+		
+		boolean passengerFound = false;
 		for (int i = 0; i < seats.size(); i++)
 		{
-			if (seats.get(i) == p && seats.get(i).isConfirmed())
+			if (seats.get(i) == p)
 			{
-				decrementPassenger(p);
-				seats.remove(i);
+				passengerFound = true;
+				break;
 			}
 		}
 		
-		/*throw new PassengerException("PASSENGER EXCEPTION MESSAGE");
-		throw new AircraftException("Aircraft EXCEPTION MESSAGE");*/
+		if (!passengerFound)
+		{
+			throw new AircraftException("Passenger can not be removed because they were never allocated a seat.");
+		}		
+		
+		//Call transition method for passenger.
+		p.cancelSeat(cancellationTime);		
 
+		//Update status string for aircraft.
 		this.status += Log.setPassengerMsg(p,"C","N");
+		
+		//Remove passenger from the seat storage for the aircraft.
+		seats.remove(p);		
+		decrementPassenger(p);
 	}
 
 	/**
@@ -113,17 +146,28 @@ public abstract class Aircraft {
 	 * OR confirmationTime OR departureTime is invalid. See {@link asgn2Passengers.Passenger#confirmSeat(int, int)}
 	 * @throws AircraftException if no seats available in <code>Passenger</code> fare class. 
 	 */
-	public void confirmBooking(Passenger p,int confirmationTime) throws AircraftException, PassengerException
+	public void confirmBooking(Passenger p, int confirmationTime) throws AircraftException, PassengerException
 	{
+		if (!p.isNew() || !p.isQueued())
+		{
+			throw new PassengerException("Passenger couldn't be booked because they're neither new or queued.");
+		}
+		
+		if (confirmationTime < 0 || departureTime < confirmationTime)
+		{
+			throw new PassengerException("Confirmation time or departure time is invalid.");		
+		}
+		
 		//There must be a seat available to continue.
 		if (!seatsAvailable(p))
 		{
 			throw new AircraftException(noSeatsAvailableMsg(p));
 		}
 		
-		//TODO: Check for correct passenger details.
+		p.confirmSeat(confirmationTime, departureTime);
 		
-		//TODO: Add passenger to aircraft.
+		//Add passenger to aircraft.
+		seats.add(p);
 		incrementPassenger(p);
 		
 		this.status += Log.setPassengerMsg(p,"N/Q","C");
