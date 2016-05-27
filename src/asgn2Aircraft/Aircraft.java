@@ -64,8 +64,13 @@ public abstract class Aircraft {
 	 * @param economy <code>int</code> capacity of Economy Class 
 	 * @throws AircraftException if isNull(flightCode) OR (departureTime <=0) OR ({first,business,premium,economy} <0)
 	 */
-	public Aircraft(String flightCode,int departureTime, int first, int business, int premium, int economy) throws AircraftException {
-		//Lots here 
+	public Aircraft(String flightCode,int departureTime, int first, int business, int premium, int economy) throws AircraftException
+	{		
+		if (flightCode.length() == 0)
+		{
+			throw new AircraftException("Flight code must not be an empty string.");
+		}
+		
 		this.status = "";
 	}
 	
