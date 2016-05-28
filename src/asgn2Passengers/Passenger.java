@@ -73,9 +73,22 @@ public abstract class Passenger {
 	 */
 	public Passenger(int bookingTime, int departureTime) throws PassengerException  {
 		//Stuff here 
+		
+		//Argument validation
+		if (bookingTime < 0){
+			throw new PassengerException("Invalid booking time, must be equal to or greater then 0");
+		}
+		
+		if ((departureTime <= 0)|| (departureTime < bookingTime)){
+			throw new PassengerException("Invalid departure time, must be equal to or greater then bookingTime and greater then 0");
+		}
+		
+		//Object setup
+		newState = true;
+		this.bookingTime = bookingTime;
+		this.departureTime = departureTime;
 		this.passID = "" + Passenger.index; 
-		Passenger.index++; 
-		//Stuff here 
+		Passenger.index++;
 	}
 	
 	/**
@@ -103,7 +116,18 @@ public abstract class Passenger {
 	 *         isFlown(this) OR (cancellationTime < 0) OR (departureTime < cancellationTime)
 	 */
 	public void cancelSeat(int cancellationTime) throws PassengerException {
-
+		
+		if ((isNew() || (isQueued()) || isRefused()) || isFlown()){
+			throw new PassengerException("Passenger is new, queued, refused or flown");
+		}
+		
+		if ((cancellationTime < 0) || (departureTime < cancellationTime)){
+			throw new PassengerException("Cancellation time muse be equal to or greater then 0 and departureTime");
+		}
+		
+		this.bookingTime = cancellationTime;
+		newState = true;
+		
 	}
 
 	/**
@@ -124,6 +148,20 @@ public abstract class Passenger {
 	 */
 	public void confirmSeat(int confirmationTime, int departureTime) throws PassengerException {
 	
+		if ((isNew() || (isQueued()) || isRefused()) || isFlown()){
+			throw new PassengerException("Passenger is new, queued, refused or flown");
+		}
+		
+		if ((confirmationTime < 0) || (departureTime < confirmationTime)){
+			throw new PassengerException("Confirmation time muse be equal to or greater then 0 and departureTime");
+		}
+		
+		newState = false;
+		confirmed = true;
+		
+		this.confirmationTime = confirmationTime;
+		this.departureTime = departureTime;
+		
 	}
 
 	/**
