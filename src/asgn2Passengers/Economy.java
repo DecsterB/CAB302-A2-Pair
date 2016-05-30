@@ -31,6 +31,6 @@ public class Economy extends Passenger {
 
 	@Override
 	public Passenger upgrade() {
-
+		
 	}
 }

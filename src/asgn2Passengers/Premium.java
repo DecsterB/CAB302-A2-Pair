@@ -4,7 +4,7 @@
 package asgn2Passengers;
 
 /**
- * @author hogan
+ * @author Matt
  *
  */
 public class Premium extends Passenger {

@@ -4,7 +4,7 @@
 package asgn2Passengers;
 
 /**
- * @author hogan
+ * @author Matt
  *
  */
 public class First extends Passenger {
@@ -21,6 +21,7 @@ public class First extends Passenger {
 	 */
 	public First(int bookingTime, int departureTime) throws PassengerException {
 		//Call here 
+		super();
 		this.passID = "F:" + this.passID;
 	}
 	
