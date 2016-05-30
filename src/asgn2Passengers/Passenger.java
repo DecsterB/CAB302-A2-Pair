@@ -117,8 +117,8 @@ public abstract class Passenger {
 	 */
 	public void cancelSeat(int cancellationTime) throws PassengerException {
 		
-		if ((isNew() || (isQueued()) || isRefused()) || isFlown()){
-			throw new PassengerException("Passenger is new, queued, refused or flown");
+		if (!(isConfirmed())){
+			throw new PassengerException("Passenger must be confirmed before cancelling");
 		}
 		
 		if ((cancellationTime < 0) || (departureTime < cancellationTime)){
@@ -126,6 +126,7 @@ public abstract class Passenger {
 		}
 		
 		this.bookingTime = cancellationTime;
+		confirmed = false;
 		newState = true;
 		
 	}
@@ -148,7 +149,7 @@ public abstract class Passenger {
 	 */
 	public void confirmSeat(int confirmationTime, int departureTime) throws PassengerException {
 	
-		if ((isNew() || (isQueued()) || isRefused()) || isFlown()){
+		if ((isConfirmed() || isRefused()) || isFlown()){
 			throw new PassengerException("Passenger is new, queued, refused or flown");
 		}
 		
@@ -157,6 +158,8 @@ public abstract class Passenger {
 		}
 		
 		newState = false;
+		inQueue = false;
+		
 		confirmed = true;
 		
 		this.confirmationTime = confirmationTime;
@@ -178,15 +181,15 @@ public abstract class Passenger {
 	 */
 	public void flyPassenger(int departureTime) throws PassengerException {
 		
-		if ((isNew() || (isQueued()) || isRefused()) || isFlown()){
-			throw new PassengerException("Passenger is new, queued, refused or flown");
+		if (!isConfirmed()){
+			throw new PassengerException("Passenger must be confirmed before flying");
 		}
 		
 		if (departureTime <= 0){
 			throw new PassengerException("Confirmation time muse be greater than 0 and departureTime");
 		}
 		
-		newState = false;
+		confirmed = false;
 		flown = true;
 		
 		this.departureTime = departureTime;
@@ -319,6 +322,20 @@ public abstract class Passenger {
 	 */
 	public void queuePassenger(int queueTime, int departureTime) throws PassengerException {
 		
+		if (!isNew()){
+			throw new PassengerException("Passenger must be new when queuing");
+		}
+		
+		if (departureTime <= 0){
+			throw new PassengerException("Confirmation time muse be greater than 0 and departureTime");
+		}
+		
+		newState = false;
+		inQueue = true;
+		
+		this.enterQueueTime = queueTime;
+		this.departureTime = departureTime;
+		
 	}
 	
 	/**
@@ -336,6 +353,19 @@ public abstract class Passenger {
 	 * 			OR (refusalTime < 0) OR (refusalTime < bookingTime)
 	 */
 	public void refusePassenger(int refusalTime) throws PassengerException {
+		
+		if ((isRefused()) || (isConfirmed()) || (isFlown())){
+			throw new PassengerException("Passenger must not be confirmed or flown");
+		}
+		
+		if ((refusalTime < bookingTime) || (refusalTime < 0)){
+			throw new PassengerException("Confirmation time muse be greater than 0 and departureTime");
+		}
+		
+		newState = false;
+		inQueue = true;
+		
+		this.exitQueueTime = refusalTime;
 		
 	}
 	
