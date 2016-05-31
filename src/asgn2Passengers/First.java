@@ -4,7 +4,7 @@
 package asgn2Passengers;
 
 /**
- * @author Matt
+ * @author Matt Baker
  *
  */
 public class First extends Passenger {

@@ -42,7 +42,7 @@ package asgn2Passengers;
  * {@link asgn2Passengers.PassengerException} is thrown if the state is inappropriate: see method javadoc for details. 
  * The method javadoc also indicates the constraints on the time and other parameters.<br><br>
  * 
- * @author hogan
+ * @author Matt Baker
  *
  */
 public abstract class Passenger {

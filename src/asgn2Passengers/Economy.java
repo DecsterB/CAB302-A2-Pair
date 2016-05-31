@@ -4,7 +4,7 @@
 package asgn2Passengers;
 
 /**
- * @author hogan
+ * @author Matt Baker
  *
  */
 public class Economy extends Passenger {
