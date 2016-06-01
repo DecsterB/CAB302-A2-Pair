@@ -30,7 +30,8 @@ public class SimulationRunner
 	{
 		final int NUM_ARGS = 9; 
 		Simulator s = null; 
-		Log l = null; 
+		Log l = null;
+		GUISimulator gui = null;
 		
 		try
 		{
@@ -60,17 +61,19 @@ public class SimulationRunner
 			System.exit(-1);
 		}
 	
-		//Run the simulation 
-		SimulationRunner sr = new SimulationRunner(s,l);
-		try
+		
+		//Create the GUI.
+		if (args.length > 0)
 		{
-			sr.runSimulation();
+			gui = new GUISimulator(args[0]);
 		}
-		catch (Exception e)
+		else
 		{
-			e.printStackTrace();
-			System.exit(-1);
-		} 
+			gui = new GUISimulator(null);
+		}
+		
+		gui.run();
+		gui.runSimulation(s, l);
 	}
 	
 	/**
@@ -160,7 +163,7 @@ public class SimulationRunner
 				this.sim.processQueue(time);
 			}
 			
-			//Log progress 
+			//Log progress.			
 			this.log.logQREntries(time, sim);
 			this.log.logEntry(time,this.sim);
 		}
