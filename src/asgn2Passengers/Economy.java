@@ -20,7 +20,13 @@ public class Economy extends Passenger {
 	 * @see asgnPassengers.Passenger#Passenger(int,int)
 	 */
 	public Economy(int bookingTime,int departureTime) throws PassengerException {
-		super();
+		//TODO: (Declan)
+		//Looks like when the constructor is called without parameters the
+		//newState is never set and the simulation will always throw an exception.
+		//For now, I have changed this to pass parameters.
+		super(bookingTime, departureTime);
+		
+		this.newState = true;		
 		this.passID = "Y:" + this.passID;
 	}
 	

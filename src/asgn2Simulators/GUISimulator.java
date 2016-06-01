@@ -123,7 +123,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         //Main combo box.
         mainTextArea = new JTextArea();
         mainTextArea.setBounds(origin.x, origin.y, 590, 320);
-        mainTextArea.setEnabled(false);
+        //mainTextArea.setEnabled(false);
         
         mainPane.add(mainTextArea);
 
@@ -172,12 +172,18 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 
 	/**
 	 * @param args
+	 * @throws SimulationException 
 	 */
-	public static void main(String[] args)
+	public static void main(String[] args) throws SimulationException
 	{
 		GUISimulator gui = new GUISimulator(WINDOW_TITLE);
 		
 		gui.run();
+		
+		//SimulatorRunner sr = new SimulatorRunner();
+		//int totalBusiness = sim.getTotalBusiness();
+		
+		//gui.mainTextArea.setText(Integer.toString(totalBusiness));
 	}
 
 }

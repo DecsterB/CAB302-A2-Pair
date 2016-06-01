@@ -20,8 +20,10 @@ public class First extends Passenger {
 	 * @see asgnPassengers.Passenger#Passenger(int,int)
 	 */
 	public First(int bookingTime, int departureTime) throws PassengerException {
-		//Call here 
-		super();
+		//TODO: (Declan)
+		//See Economy constructor.
+		super(bookingTime, departureTime);
+		
 		this.passID = "F:" + this.passID;
 	}
 	
