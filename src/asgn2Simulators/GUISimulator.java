@@ -49,7 +49,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	JLayeredPane viewPane, mainPane;
 	JComboBox viewList, pageList;
 	JTextField seedTextField, maxQueueTextField,
-	meanBookTextField, bookSDTextField, minBookTextField, firstProbTextField,
+	meanBookTextField, bookSDTextField, firstProbTextField,
 	businessProbTextField, premiumProbTextField, ecoProbTextField,
 	cancelProbTextField;
 	
@@ -195,21 +195,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         
         origin.y -= TEXT_HEIGHT;
         origin.x += TEXT_WIDTH;
-        
-		//Daily minimum booking text box and label.
-        JLabel minBookLabel = new JLabel("Daily Minimum Booking: ");
-        minBookLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(minBookLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        minBookTextField = new JTextField();
-        minBookTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(minBookTextField);
-        
-        origin.y += TEXT_HEIGHT;
-        origin.x = 15;
-        
+          
 		//First class probability text box and label.
         JLabel firstProbLabel = new JLabel("First Class Probability: ");
         firstProbLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
@@ -221,8 +207,8 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         firstProbTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
         mainPane.add(firstProbTextField);
         
-        origin.y -= TEXT_HEIGHT;
-        origin.x += TEXT_WIDTH;
+        origin.y += TEXT_HEIGHT;
+        origin.x = 15;
         
 		//Business class probability text box and label.
         JLabel businessProbLabel = new JLabel("Business Class Probability: ");
@@ -316,13 +302,13 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         }
         else if (cmd.contentEquals(SIMULATE_COMMAND))
         {
-        	//TODO: Get integers from the simulate page.
     		Simulator s = null;
     		Log l = null;
     		
 			try
 			{
-				s = new Simulator();
+	        	//TODO: Get and verify integers from the simulate page.
+				s = parseSimulationPage();
 			}
 			catch (SimulationException e1)
 			{
@@ -340,6 +326,39 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 
     		this.runSimulation(s, l);
         }
+    }
+    
+    private Simulator parseSimulationPage() throws SimulationException
+    {
+    	Simulator s;
+    	int seed = 0, maxQueue = 0;
+    	double meanBook = 0.0, firstProb = 0.0, businessProb = 0.0,
+    	bookSD = 0.0, premiumProb = 0.0, ecoProb = 0.0, cancelProb = 0.0;
+    	
+    	//Get values from GUI inputs.
+    	try
+    	{
+    		seed = Integer.parseInt(seedTextField.getText());
+    		maxQueue = Integer.parseInt(maxQueueTextField.getText());
+    		meanBook = Double.parseDouble(meanBookTextField.getText());
+    		bookSD = Double.parseDouble(bookSDTextField.getText());
+    		firstProb = Double.parseDouble(firstProbTextField.getText());
+    		businessProb = Double.parseDouble(businessProbTextField.getText());
+    		premiumProb = Double.parseDouble(premiumProbTextField.getText());
+    		ecoProb = Double.parseDouble(ecoProbTextField.getText());
+    		cancelProb = Double.parseDouble(cancelProbTextField.getText());
+    	}
+    	catch (NumberFormatException e)
+    	{
+    		//TODO: Throw here.
+    		//return false;
+    	}
+    	
+    	//Set values for upcoming simulation.
+    	s = new Simulator(seed, maxQueue, meanBook,  bookSD,
+    			firstProb, businessProb, premiumProb, ecoProb, cancelProb);
+    	
+		return s;
     }
     
 	/* (non-Javadoc)
@@ -384,7 +403,6 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		maxQueueTextField.setText(String.valueOf(Constants.DEFAULT_MAX_QUEUE_SIZE));
 		meanBookTextField.setText(String.valueOf(Constants.DEFAULT_DAILY_BOOKING_MEAN));
 		bookSDTextField.setText(String.valueOf(Constants.DEFAULT_DAILY_BOOKING_SD));
-		minBookTextField.setText(String.valueOf(Constants.MINIMUM_BOOKINGS));
 		firstProbTextField.setText(String.valueOf(Constants.DEFAULT_FIRST_PROB));
 		businessProbTextField.setText(String.valueOf(Constants.DEFAULT_BUSINESS_PROB));
 		premiumProbTextField.setText(String.valueOf(Constants.DEFAULT_PREMIUM_PROB));
