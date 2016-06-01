@@ -10,7 +10,7 @@ package asgn2Aircraft;
 import java.util.ArrayList;
 import java.util.List;
 
-import com.sun.glass.ui.CommonDialogs.Type;
+//import com.sun.glass.ui.CommonDialogs.Type;
 
 import asgn2Passengers.Business;
 import asgn2Passengers.Economy;
@@ -36,7 +36,8 @@ import asgn2Simulators.Log;
  * @author Declan Barker
  *
  */
-public abstract class Aircraft {
+public abstract class Aircraft
+{
 
 	protected int firstCapacity;
 	protected int businessCapacity;

@@ -21,10 +21,11 @@ import asgn2Passengers.Premium;
 /**
  * Class to support logging for the Aircraft Simulator 
  *  
- * @author hogan
+ * @author Declan Barker
  *
  */
-public class Log {
+public class Log
+{
 	
 	//Controls logging of detailed status information 
 	public static final boolean SAVE_STATUS = false; 
@@ -37,17 +38,26 @@ public class Log {
 	 * @param target <code>String</code> holding finishing state (uses Q,C,R,F) - (Queued,Confirmed,Refused,Flown)
 	 * @return <code>String</code> containing transition in the form: |(F|J|P|Y):(N|Q|C)>(Q|C|R|F)| 
 	 */
-	public static String setPassengerMsg(Passenger p,String source, String target) {
+	public static String setPassengerMsg(Passenger p,String source, String target)
+	{
 		String str="";
-		if (p instanceof First) {
+		if (p instanceof First)
+		{
 			str += "F";
-		} else if (p instanceof Business) {
+		}
+		else if (p instanceof Business)
+		{
 			str += "J";
-		} else if (p instanceof Premium) {
+		}
+		else if (p instanceof Premium) 
+		{
 			str += "P";
-		} else {
+		}
+		else
+		{
 			str += "Y";
 		}
+		
 		return "|"+str+":"+source+">"+target+"|";
 	}
 	
@@ -57,15 +67,22 @@ public class Log {
 	 * @param p <code>Passenger</code> to be upgraded 
 	 * @return <code>String</code> containing transition in the form: |(J|P|Y)>(F|J|P)| 
 	 */
-	public static String setUpgradeMsg(Passenger p) {
+	public static String setUpgradeMsg(Passenger p)
+	{
 		String str="";
-		if (p instanceof Business) {
+		if (p instanceof Business)
+		{
 			str += "J>F";
-		} else if (p instanceof Premium) {
+		}
+		else if (p instanceof Premium)
+		{
 			str += "P>J";
-		} else {
+		}
+		else
+		{
 			str += "Y>P";
 		}
+		
 		return "|U:"+str+"|";
 	}
 	
@@ -77,7 +94,8 @@ public class Log {
 	 *
 	 * @throws IOException if the log files or BufferedWriters cannot be created
 	 */
-	public Log () throws IOException {
+	public Log () throws IOException
+	{
 		//File management based on http://stackoverflow.com/questions/15754523/how-to-write-text-file-java 
         File logFile = new File(getLogTime());
 
@@ -85,7 +103,8 @@ public class Log {
         System.out.println(logFile.getCanonicalPath());
         this.writer = new BufferedWriter(new FileWriter(logFile));
         
-        if (Log.SAVE_STATUS) {
+        if (Log.SAVE_STATUS)
+        {
 	        File detFile = new File(getLogTime()+"Detail");
 	        this.detWriter = new BufferedWriter(new FileWriter(detFile));
         }
@@ -97,13 +116,15 @@ public class Log {
 	 * @param sim <code>Simulator</code> being used 
 	 * @throws IOException on write or closure failures 
 	 */
-	public void finalise(Simulator sim) throws IOException {
+	public void finalise(Simulator sim) throws IOException
+	{
 		String time = getLogTime(); 
 		writer.write("\n" + time + ": End of Simulation\n");
 		writer.write(sim.finalState());
 		writer.close();
 		
-		if (Log.SAVE_STATUS) {
+		if (Log.SAVE_STATUS)
+		{
 			detWriter.write("\n" + time + ": End of Simulation\n");
 			detWriter.close(); 
 		}
@@ -117,7 +138,8 @@ public class Log {
 	 * @throws IOException on write failures 
 	 * @throws SimulationException See {@link asgn2Simulators.Simulator#getFlights(int)}
 	 */
-	public void initialEntry(Simulator sim) throws IOException, SimulationException {
+	public void initialEntry(Simulator sim) throws IOException, SimulationException
+	{
 		writer.write(getLogTime() + ": Start of Simulation\n");
 		writer.write(sim.toString() + "\n");
 		String capacities = sim.getFlights(Constants.FIRST_FLIGHT).initialState();
@@ -133,7 +155,8 @@ public class Log {
 	 * @throws SimulationException See {@link asgn2Simulators.Simulator#getSummary(int, boolean)}
 	 * @throws IOException on write failures 
 	 */
-	public void logEntry(int time,Simulator sim) throws IOException, SimulationException {
+	public void logEntry(int time,Simulator sim) throws IOException, SimulationException
+	{
 		boolean flying = (time >= Constants.FIRST_FLIGHT);
 		writer.write(sim.getSummary(time, flying));
 	}
@@ -146,8 +169,10 @@ public class Log {
 	 * @param sim <code>Simulator</code> controlling simulation 
 	 * @throws IOException on write failures 
 	 */
-	public void logQREntries(int time,Simulator sim) throws IOException {
-		if (Log.SAVE_STATUS) {
+	public void logQREntries(int time,Simulator sim) throws IOException
+	{
+		if (Log.SAVE_STATUS)
+		{
 			detWriter.write(sim.getStatus(time));
 		}
 	}
@@ -161,8 +186,10 @@ public class Log {
 	 * @throws IOException on write failures 
 	 * @throws SimulationException See {@link Simulator#getFlights(int)}
 	 */
-	public void logFlightEntries(int time,Simulator sim) throws IOException, SimulationException {
-		if (Log.SAVE_STATUS) {
+	public void logFlightEntries(int time,Simulator sim) throws IOException, SimulationException
+	{
+		if (Log.SAVE_STATUS)
+		{
 			Flights flights = sim.getFlights(time); 
 			detWriter.write(flights.getStatus(time));
 		}
@@ -172,9 +199,9 @@ public class Log {
 	 * Helper returning Log Time format for filename
 	 * @return filename String yyyyMMdd_HHmmss
 	 */
-	private String getLogTime() {
+	private String getLogTime()
+	{
 		String timeLog = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 		return timeLog;
 	}
-
 }

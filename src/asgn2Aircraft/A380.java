@@ -14,14 +14,13 @@ package asgn2Aircraft;
  * @author Declan Barker
  *
  */
-public class A380 extends Aircraft {
-	
+public class A380 extends Aircraft
+{
 	static final int FIRST = 14;
 	static final int BUSINESS = 64;
 	static final int PREMIUM = 35;
 	static final int ECONOMY = 371;
 
-	
 	/**
 	 * Constructor for A380 uses default fare class capacities 
 	 * 

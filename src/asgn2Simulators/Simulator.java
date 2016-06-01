@@ -29,7 +29,7 @@ import asgn2Passengers.Premium;
  * Methods provide daily booking levels according to the distribution N(meanBookings,sdBookings^2), 
  * and outcomes for fare class selection (or passenger creation) and other random decisions.   
  * 
- * @author hogan
+ * @author Declan Barker
  *
  */
 public class Simulator {
@@ -42,7 +42,8 @@ public class Simulator {
 	 * @param successProb double holding the success probability 
 	 * @return true if trial was successful, false otherwise
 	 */
-	public static boolean randomSuccess(Random rng,double successProb) {
+	public static boolean randomSuccess(Random rng,double successProb)
+	{
 		boolean result = rng.nextDouble() <= successProb;
 		return result;
 	}
@@ -81,7 +82,8 @@ public class Simulator {
 	 * @throws SimulationException if one or more probabilities are invalid, or if (meanDailyBookings < 0) OR 
 	 * (sdDailyBookings < 0). See {@link #Simulator(int, int, double, double, double, double, double, double, double)}
 	 */
-	public Simulator() throws SimulationException {
+	public Simulator() throws SimulationException
+	{
 		this(Constants.DEFAULT_SEED,Constants.DEFAULT_MAX_QUEUE_SIZE,Constants.DEFAULT_DAILY_BOOKING_MEAN,Constants.DEFAULT_DAILY_BOOKING_SD,
 	 		 Constants.DEFAULT_FIRST_PROB,Constants.DEFAULT_BUSINESS_PROB,
 			 Constants.DEFAULT_PREMIUM_PROB,Constants.DEFAULT_ECONOMY_PROB,
@@ -103,7 +105,8 @@ public class Simulator {
 	 * @throws SimulationException if one or more probabilities are invalid, or if meanDailyBookings < 0 or sdDailyBookings < 0
 	 */
 	public Simulator(int seed,int maxQueueSize,double meanDailyBookings, double sdDailyBookings,
-			double firstProb, double businessProb, double premiumProb, double economyProb, double cancelProb) throws SimulationException {
+			double firstProb, double businessProb, double premiumProb, double economyProb, double cancelProb) throws SimulationException
+	{
 		checkProbabilties(firstProb, businessProb, premiumProb, economyProb);
 		checkSimParamsAndThrowExceptions(maxQueueSize, meanDailyBookings, sdDailyBookings);
 
@@ -131,8 +134,7 @@ public class Simulator {
 		this.totalFlown=0;
 		this.totalEmpty=0;
 		this.status = "";
-	}
-	
+	}	
 	
 	/**
 	 * Method to create a New Passenger. Fare class is decided using probabilities 
@@ -144,18 +146,26 @@ public class Simulator {
 	 * @throws PassengerException if invalid constructor parameters. 
 	 * See {@link asgn1Passengers.Passenger#Passenger(int,int)}
 	 */
-	public Passenger createPassenger(int bookingTime,int departureTime) throws PassengerException {
+	public Passenger createPassenger(int bookingTime,int departureTime) throws PassengerException
+	{
 		double testValue = rng.nextDouble();
 		double busTest = this.firstProb+this.businessProb;
 		double premTest = busTest+this.premiumProb;
 		
-		if (testValue >= (1.0 - this.firstProb)) {
+		if (testValue >= (1.0 - this.firstProb))
+		{
 			return new First(bookingTime,departureTime);
-		} else if (testValue >= (1.0 - busTest)) {
+		}
+		else if (testValue >= (1.0 - busTest))
+		{
 			return new Business(bookingTime,departureTime); 
-		} else if (testValue >= (1.0 - premTest)) {
+		}
+		else if (testValue >= (1.0 - premTest))
+		{
 			return new Premium(bookingTime,departureTime); 
-		} else {
+		}
+		else
+		{
 			return new Economy(bookingTime,departureTime);
 		}
 	}
@@ -165,8 +175,10 @@ public class Simulator {
 	 * 
 	 * @throws AircraftException if problems with arguments to {@link asgn2Aircraft.Aircraft} constructor
 	 */
-	public void createSchedule() throws AircraftException {
-		for (int time=0; time<=Constants.DURATION-Constants.FIRST_FLIGHT; time++) {
+	public void createSchedule() throws AircraftException
+	{
+		for (int time=0; time<=Constants.DURATION-Constants.FIRST_FLIGHT; time++)
+		{
 			this.schedule.add(new Flights(time+Constants.FIRST_FLIGHT));
 		}
 	}
@@ -178,15 +190,18 @@ public class Simulator {
 	 * @param time <code>int</code> time operation performed. 
 	 * @throws PassengerException See {@link asgn2Passengers.Passenger#refusePassenger(int)}
 	 */
-	public void finaliseQueuedAndCancelledPassengers(int time) throws PassengerException {
-		for (Passenger p : this.queue) {
+	public void finaliseQueuedAndCancelledPassengers(int time) throws PassengerException
+	{
+		for (Passenger p : this.queue)
+		{
 			p.refusePassenger(time);
 			this.status += Log.setPassengerMsg(p,"Q","R");
 		}
 		this.refused.addAll(this.queue);
 		this.queue.clear();
 		
-		for (Passenger p : this.cancelled) {
+		for (Passenger p : this.cancelled)
+		{
 			p.refusePassenger(time);
 			this.status += Log.setPassengerMsg(p,"N","R");
 		}
@@ -199,7 +214,8 @@ public class Simulator {
 	 * 
 	 * @return <code>String</code> reporting final totals 
 	 */
-	public String finalState() {
+	public String finalState()
+	{
 		String str = "Final Totals: [F" + this.getTotalFirst()
 					+ ":J" + this.getTotalBusiness()
 					+ ":P" + this.getTotalPremium()
@@ -207,6 +223,7 @@ public class Simulator {
 					+ ":T" + this.getTotalFlown()
 					+ ":E" + this.getTotalEmpty()
 					+ ":R" + this.numRefused() +"]\n";
+		
 		return str; 
 	}
 
@@ -217,7 +234,8 @@ public class Simulator {
 	 * @throws SimulationException See {@link #getFlights(int)}
 	 * @throws PassengerException See {@link asgn2Simulators.Flights#flyPassengers(int)}
 	 */
-	public void flyPassengers(int time) throws SimulationException, PassengerException {
+	public void flyPassengers(int time) throws SimulationException, PassengerException
+	{
 		Flights flights = this.getFlights(time);
 		flights.flyPassengers(time); 
 	}
@@ -232,7 +250,8 @@ public class Simulator {
 	 * @throws SimulationException See {@link #processNewPassenger(Flights, Passenger, int, int)}, 
 	 * {@link #createPassenger(int, int)}
 	 */
-	public void generateAndHandleBookings(int time) throws AircraftException, PassengerException, SimulationException {
+	public void generateAndHandleBookings(int time) throws AircraftException, PassengerException, SimulationException
+	{
 		//Total Booking period:  FIRST_FLIGHT until DURATION 
 		//Correct for current time, possible end of simulation 
 		assert Constants.MAX_BOOKING_PERIOD > Constants.FIRST_FLIGHT; 
@@ -244,10 +263,12 @@ public class Simulator {
 		int bookingsPerDay = Math.max(1,((int) Math.floor(this.currentBookings/bookingDays)));	
 		
 		//Process the whole booking period 
-		for (int departureTime=bookingStart; departureTime<=bookingEnd; departureTime++) {
+		for (int departureTime=bookingStart; departureTime<=bookingEnd; departureTime++)
+		{
 			Flights flights = this.getFlights(departureTime);
 			
-			for (int pass=0; pass<=bookingsPerDay-1; pass++) {
+			for (int pass=0; pass<=bookingsPerDay-1; pass++)
+			{
 				//Passenger in New state 
 				Passenger p = this.createPassenger(time, departureTime);
 				processNewPassenger(flights, p, time, departureTime);
@@ -260,7 +281,8 @@ public class Simulator {
 	 * 
 	 * @return <code>double</code> random bookings drawn from N(meanDailyBookings,sdDailyBookings) or MINIMUM_BOOKINGS, whichever is greater
 	 */
-	public int getDailyBookings() {
+	public int getDailyBookings()
+	{
 		//z ~ N(0,1) so transform 
 		double z = this.rng.nextGaussian(); 
 		double x = z*this.sdDailyBookings + this.meanDailyBookings;
@@ -276,7 +298,8 @@ public class Simulator {
 	 * @throws SimulationException if (departureTime < FIRST_FLIGHT) OR 
 	 * (departureTime > DURATION)
 	 */
-	public Flights getFlights(int departureTime) throws SimulationException {
+	public Flights getFlights(int departureTime) throws SimulationException
+	{
 		checkValidDepartureTimeAndThrowException(departureTime);
 		return this.schedule.get(departureTime-Constants.FIRST_FLIGHT);
 	}
@@ -288,7 +311,8 @@ public class Simulator {
 	 * @return <code>Bookings</code> containing current passenger counts 
 	 * @throws SimulationException See {@link #getFlights(int)}
 	 */
-	public Bookings getFlightStatus(int time) throws SimulationException {
+	public Bookings getFlightStatus(int time) throws SimulationException
+	{
 		Flights flights = this.getFlights(time);
 		return flights.getCurrentCounts();
 	}
@@ -297,7 +321,8 @@ public class Simulator {
 	 * @param time <code>int</code> current time - presently unused
 	 * @return <code>String</code> with current status string and newline 
 	 */
-	public String getStatus(int time) {
+	public String getStatus(int time)
+	{
 		return this.status + "\n";
 	}
 
@@ -310,9 +335,11 @@ public class Simulator {
 	 * @return <code>String</code> report on Passenger counts at current time 
 	 * @throws SimulationException See {@link #getFlights(int)}
 	 */
-	public String getSummary(int time, boolean flying) throws SimulationException {
+	public String getSummary(int time, boolean flying) throws SimulationException
+	{
 		String str = time + ":" + this.currentBookings;
-		if (flying) {
+		if (flying)
+		{
 			Flights flights = this.getFlights(time);
 			Bookings counts = flights.getCurrentCounts();
 			str += ":F" + counts.getNumFirst() 
@@ -332,7 +359,8 @@ public class Simulator {
 	 * 
 	 * @return totalBusiness
 	 */
-	public int getTotalBusiness() {
+	public int getTotalBusiness()
+	{
 		return totalBusiness;
 	}
 	
@@ -341,7 +369,8 @@ public class Simulator {
 	 * 
 	 * @return totalEconomy
 	 */
-	public int getTotalEconomy() {
+	public int getTotalEconomy()
+	{
 		return totalEconomy;
 	}
 
@@ -350,7 +379,8 @@ public class Simulator {
 	 *  
 	 * @return totalEmpty
 	 */
-	public int getTotalEmpty() {
+	public int getTotalEmpty()
+	{
 		return totalEmpty;
 	}
 	
@@ -359,7 +389,8 @@ public class Simulator {
 	 * 
 	 * @return totalFirst
 	 */
-	public int getTotalFirst() {
+	public int getTotalFirst()
+	{
 		return totalFirst;
 	}
 	
@@ -368,7 +399,8 @@ public class Simulator {
 	 * 
 	 * @return totalFlown
 	 */
-	public int getTotalFlown() {
+	public int getTotalFlown()
+	{
 		return totalFlown;
 	}
 
@@ -377,7 +409,8 @@ public class Simulator {
 	 *  
 	 * @return totalPremium
 	 */
-	public int getTotalPremium() {
+	public int getTotalPremium()
+	{
 		return totalPremium;
 	}
 
@@ -386,7 +419,8 @@ public class Simulator {
 	 * 
 	 * @return #queue
 	 */
-	public int numInQueue() {
+	public int numInQueue()
+	{
 		return this.queue.size();
 	}
 	
@@ -395,7 +429,8 @@ public class Simulator {
 	 * 
 	 * @return #refused
 	 */
-	public int numRefused() {
+	public int numRefused()
+	{
 		return this.refused.size();
 	}
 
@@ -409,13 +444,15 @@ public class Simulator {
 	 * @throws PassengerException See {@link asgn2Simulators.Flights#cancelBookings(Random, double, int)}
 	 * @throws AircraftException
 	 */
-	public void processNewCancellations(int time) throws SimulationException, PassengerException, AircraftException {
+	public void processNewCancellations(int time) throws SimulationException, PassengerException, AircraftException
+	{
 		//Cancellation period: correct for starting time, end of simulation 
 		int cancelPeriodStart = Math.max(time,Constants.FIRST_FLIGHT);
 		int cancelPeriodEnd = time + Constants.CANCELLATION_PERIOD;
 		cancelPeriodEnd = Math.min(Constants.DURATION,cancelPeriodEnd); 
 
-		for (int cancel=cancelPeriodStart; cancel<=cancelPeriodEnd; cancel++) {
+		for (int cancel=cancelPeriodStart; cancel<=cancelPeriodEnd; cancel++)
+		{
 			Flights flights = this.getFlights(cancel);
 			this.cancelled.addAll(flights.cancelBookings(this.rng, this.cancelProb, time)); 
 		}
@@ -431,8 +468,10 @@ public class Simulator {
 	 * @throws PassengerException See {@link asgn2Simulators.Simulator#refuseBooking(Passenger, int)} and 
 	 * {@link asgn2Simulators.Flights#addPassenger(Passenger, int)}
 	 */
-	public void processQueue(int time) throws SimulationException, AircraftException, PassengerException {
-		while (!this.queueEmpty()) {
+	public void processQueue(int time) throws SimulationException, AircraftException, PassengerException
+	{
+		while (!this.queueEmpty())
+		{
 			Passenger p = queue.peek(); 
 			boolean deQueued = false; 
 			
@@ -443,14 +482,19 @@ public class Simulator {
 			int maxConfirmationTime = departureTime + Constants.MAX_QUEUING_PERIOD;
 			maxConfirmationTime = Math.min(maxConfirmationTime,Constants.DURATION);
 			
-			if (time > maxConfirmationTime) {
+			if (time > maxConfirmationTime)
+			{
 				p = this.queue.poll();
 				this.refuseBooking(p,time);
-			} else { 
+			}
+			else
+			{ 
 				//We see if we can confirm seat during allowable queueing period 
-				for (int newDeparture=minConfirmationTime; newDeparture<=maxConfirmationTime; newDeparture++) {
+				for (int newDeparture=minConfirmationTime; newDeparture<=maxConfirmationTime; newDeparture++)
+				{
 					Flights flights = this.getFlights(newDeparture);
-					if (flights.seatsAvailable(p)) {
+					if (flights.seatsAvailable(p))
+					{
 						p = this.queue.poll(); 
 						flights.addPassenger(p,time);
 						deQueued = true;
@@ -459,7 +503,8 @@ public class Simulator {
 				}
 				
 				//Queue is blocked
-				if (!deQueued) {
+				if (!deQueued)
+				{
 					break; 
 				}
 			}
@@ -472,7 +517,8 @@ public class Simulator {
 	 * @param time <code>int</code> time of operation 
 	 * @throws SimulationException See {@link asgn2Simulators.Simulator#getFlights(int)}
 	 */
-	public void processUpgrades(int time) throws SimulationException {
+	public void processUpgrades(int time) throws SimulationException
+	{
 		Flights flights = this.getFlights(time);
 		flights.upgradePassengers();
 	}
@@ -482,7 +528,8 @@ public class Simulator {
 	 * 
 	 * @return true if queue empty, false otherwise
 	 */
-	public boolean queueEmpty() {
+	public boolean queueEmpty()
+	{
 		return this.queue.size() == 0;
 	}
 
@@ -491,7 +538,8 @@ public class Simulator {
 	 * 
 	 * @return true if queue full, false otherwise
 	 */
-	public boolean queueFull() {
+	public boolean queueFull()
+	{
 		return this.queue.size() == this.maxQueueSize;
 	}
 
@@ -506,10 +554,13 @@ public class Simulator {
 	 * OR queueTime OR departureTime is invalid. See {@link asgn2Passengers.Passenger#queuePassenger(int, int)}
 	 * @throws SimulationException if <code>isFull(queue)</code>. 
 	 */
-	public void queuePassenger(Passenger p,int queueTime,int departureTime) throws SimulationException, PassengerException { 
-		if (this.queueFull()) {
+	public void queuePassenger(Passenger p,int queueTime,int departureTime) throws SimulationException, PassengerException
+	{ 
+		if (this.queueFull())
+		{
 			throw new SimulationException("Queue is full");
 		}
+		
 		p.queuePassenger(queueTime, departureTime);
 		this.status += Log.setPassengerMsg(p,"N","Q");
 		this.queue.add(p);
@@ -524,27 +575,33 @@ public class Simulator {
 	 * @throws AircraftException, PassengerException See {@link asgn2Aircraft.Aircraft#confirmBooking(Passenger, int)}
 	 * @throws SimulationException See {@link asgn2Simulators.Simulator#getFlights(int)}
 	 */
-	public void rebookCancelledPassengers(int time) throws AircraftException, PassengerException, SimulationException {
-		for (Passenger p : this.cancelled) {
+	public void rebookCancelledPassengers(int time) throws AircraftException, PassengerException, SimulationException
+	{
+		for (Passenger p : this.cancelled)
+		{
 			boolean rebooked = false; 
 			int departureTime = p.getDepartureTime(); 
 			int maxRebookingTime = departureTime + Constants.CANCELLATION_PERIOD;
 			maxRebookingTime = Math.min(maxRebookingTime,Constants.DURATION);
 			
-			for (int rebook=departureTime+1; rebook<=maxRebookingTime; rebook++) {
+			for (int rebook=departureTime+1; rebook<=maxRebookingTime; rebook++)
+			{
 				Flights flights = this.getFlights(rebook);
-				if (flights.seatsAvailable(p)) {
+				if (flights.seatsAvailable(p))
+				{
 					flights.addPassenger(p,time);
 					rebooked=true; 
 					break; 
 				}
 			}
 			
-			if (!rebooked) {
+			if (!rebooked)
+			{
 				int newDepartureTime = Math.max(time+1, departureTime);
 				queueOrRefusePassenger(p, time, newDepartureTime);
 			}
 		}
+		
 		this.cancelled.clear();
 	}
 
@@ -556,7 +613,8 @@ public class Simulator {
 	 * @throws PassengerException if <code>Passenger</code> is in incorrect state 
 	 * OR refusalTime is invalid. See {@link asgn2Passengers.Passenger#refusePassenger(int)}. 
 	 */
-	public void refuseBooking(Passenger p,int refusalTime) throws PassengerException { 
+	public void refuseBooking(Passenger p,int refusalTime) throws PassengerException
+	{ 
 		p.refusePassenger(refusalTime);
 		this.status += Log.setPassengerMsg(p,"N/Q","R");
 		this.refused.add(p);
@@ -567,7 +625,8 @@ public class Simulator {
 	 * 
 	 * @param time <code>int</code> Current simulation step 
 	 */
-	public void resetStatus(int time) {
+	public void resetStatus(int time)
+	{
 		this.status = time + ":";
 	}
 	
@@ -575,7 +634,8 @@ public class Simulator {
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString() {
+	public String toString()
+	{
 		return "Simulator [meanDailyBookings=" + meanDailyBookings + ", sdDailyBookings=" + sdDailyBookings
 				+ ", seed=" + seed + ", firstProb=" + firstProb + ", businessProb="
 				+ businessProb + ", premiumProb=" + premiumProb 
@@ -589,9 +649,11 @@ public class Simulator {
 	 * @return <code>Bookings</code> containing current passenger counts 
 	 * @throws SimulationException See {@link #getFlights(int)}
 	 */
-	public void updateTotalCounts(int time) throws SimulationException {
+	public void updateTotalCounts(int time) throws SimulationException
+	{
 		Flights flights = this.getFlights(time);
 		Bookings counts = flights.getCurrentCounts();
+		
 		this.totalFirst += counts.getNumFirst();
 		this.totalBusiness += counts.getNumBusiness();
 		this.totalPremium += counts.getNumPremium();
@@ -606,26 +668,36 @@ public class Simulator {
 	 * @throws SimulationException if invalidProb({firstProb,businessProb,premiumProb,economyProb})
 	 */
 	private void checkProbabilties(double firstProb, double businessProb,
-			double premiumProb, double economyProb) throws SimulationException {
+			double premiumProb, double economyProb) throws SimulationException
+	{
 		String msg = "";
 		boolean throwExcept = false; 
-		if (invalidProbability(firstProb)) {
+		if (invalidProbability(firstProb))
+		{
 			msg += " firstProb ";
 			throwExcept = true;
-		} 
-		if (invalidProbability(businessProb)) {
+		}
+		
+		if (invalidProbability(businessProb))
+		{
 			msg += " businessProb ";
 			throwExcept = true;
 		}
-		if (invalidProbability(premiumProb)) {
+		
+		if (invalidProbability(premiumProb))
+		{
 			msg += " premiumProb ";
 			throwExcept = true;
 		}
-		if (invalidProbability(economyProb)) {
+		
+		if (invalidProbability(economyProb))
+		{
 			msg += " economyProb ";
 			throwExcept = true;
 		}
-		if (throwExcept) {
+		
+		if (throwExcept)
+		{
 			throw new SimulationException(msg + " must lie in [0,1]");
 		}
 	}
@@ -636,8 +708,10 @@ public class Simulator {
 	 * @throws SimulationException if {maxQueueSize,meanDailyBookings,sdDailyBookings} < 0
 	 */
 	private void checkSimParamsAndThrowExceptions(int maxQueueSize, double meanDailyBookings, double sdDailyBookings)
-			throws SimulationException {
-		if ((maxQueueSize<0) || (meanDailyBookings <0) || (sdDailyBookings <0)) {
+			throws SimulationException
+	{
+		if ((maxQueueSize < 0) || (meanDailyBookings < 0) || (sdDailyBookings < 0))
+		{
 			throw new SimulationException(" Invalid queueSize, mean or standard deviation");
 		}
 	}
@@ -648,8 +722,10 @@ public class Simulator {
 	 * @param departureTime <code>int</code> to be tested
 	 * @throws SimulationException if isInvalid(departureTime)
 	 */
-	private void checkValidDepartureTimeAndThrowException(int departureTime) throws SimulationException {
-		if ((departureTime < Constants.FIRST_FLIGHT) || (departureTime > Constants.DURATION)) {
+	private void checkValidDepartureTimeAndThrowException(int departureTime) throws SimulationException
+	{
+		if ((departureTime < Constants.FIRST_FLIGHT) || (departureTime > Constants.DURATION))
+		{
 			throw new SimulationException("Invalid departure time");
 		}
 	}
@@ -660,7 +736,8 @@ public class Simulator {
 	 * @param prob double holding probability 
 	 * @return true if invalid (prob > 1.0) OR (prob < 0.0); false otherwise 
 	 */
-	private boolean invalidProbability(double prob) {
+	private boolean invalidProbability(double prob)
+	{
 		return (prob < 0.0) || (prob > 1.0);
 	}
 
@@ -668,10 +745,14 @@ public class Simulator {
 	 * Helper to wrap the processing of new passengers - confirm or queueOrRefuse 
 	 */
 	private void processNewPassenger(Flights flights, Passenger p, int time, int departureTime)
-			throws AircraftException, PassengerException, SimulationException {
-		if (flights.seatsAvailable(p)) {
+			throws AircraftException, PassengerException, SimulationException
+	{
+		if (flights.seatsAvailable(p))
+		{
 			flights.addPassenger(p, time);
-		} else {
+		}
+		else
+		{
 			queueOrRefusePassenger(p, time, departureTime);
 		}
 	}
@@ -680,10 +761,14 @@ public class Simulator {
 	 * Helper to wrap the queuePassenger and refuseBooking combination
 	 */
 	private void queueOrRefusePassenger(Passenger p, int time, int departureTime)
-			throws SimulationException, PassengerException {
-		if (!this.queueFull()) {
+			throws SimulationException, PassengerException
+	{
+		if (!this.queueFull())
+		{
 			this.queuePassenger(p,time,departureTime); 
-		} else {
+		}
+		else
+		{
 			this.refuseBooking(p,time);
 		}
 	}

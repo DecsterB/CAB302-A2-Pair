@@ -9,17 +9,19 @@ package asgn2Simulators;
 /**
  * This class represents exceptions generated during the
  * simulation, from classes which utilise the A380 and Passenger hierarchy.
- * @author hogan 
+ * @author Declan Barker 
  */
 @SuppressWarnings("serial") // We're not interested in binary i/o here
-public class SimulationException extends Exception {
+public class SimulationException extends Exception
+{
 	
 	/**
 	 * Creates a new instance of SimulationException.
 	 * 
 	 * @param message String holding an informative message about the problem encountered
 	 */
-	public SimulationException(String message) {
+	public SimulationException(String message)
+	{
 		super("Simulation Exception: " + message);
 	}
 }

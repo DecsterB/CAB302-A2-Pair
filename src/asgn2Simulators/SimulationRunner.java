@@ -15,50 +15,64 @@ import asgn2Passengers.PassengerException;
  * Class to operate the simulation, taking parameters and utility methods from the Simulator
  * to control the available resources, and using Log to provide a record of operation. 
  * 
- * @author hogan
+ * @author Declan Barker
  *
  */ 
-public class SimulationRunner {
+public class SimulationRunner
+{
 	/**
 	 * Main program for the simulation 
 	 * 
 	 * @param args Arguments to the simulation - 
 	 * see {@link asgn2Simulators.SimulationRunner#printErrorAndExit()}
 	 */
-	public static void main(String[] args) {
+	public static void main(String[] args)
+	{
 		final int NUM_ARGS = 9; 
 		Simulator s = null; 
 		Log l = null; 
 		
-		try {
-			switch (args.length) {
-				case NUM_ARGS: {
+		try
+		{
+			switch (args.length)
+			{
+				case NUM_ARGS:
+				{
 					s = createSimulatorUsingArgs(args); 
 					break;
 				}
-				case 0: {
+				case 0:
+				{
 					s = new Simulator(); 
 					break;
 				}
-				default: {
+				default:
+				{
 					printErrorAndExit(); 
 				}
 			}
+			
 			l = new Log();
-		} catch (SimulationException | IOException e1) {
+		}
+		catch (SimulationException | IOException e1)
+		{
 			e1.printStackTrace();
 			System.exit(-1);
 		}
 	
 		//Run the simulation 
 		SimulationRunner sr = new SimulationRunner(s,l);
-		try {
+		try
+		{
 			sr.runSimulation();
-		} catch (Exception e) {
+		}
+		catch (Exception e)
+		{
 			e.printStackTrace();
 			System.exit(-1);
 		} 
 	}
+	
 	/**
 	 * Helper to process args for Simulator  
 	 * 
@@ -67,7 +81,8 @@ public class SimulationRunner {
 	 * @throws SimulationException if invalid arguments. 
 	 * See {@link asgn2Simulators.Simulator#Simulator(int, int, double, double, double, double, double, double, double)}
 	 */
-	private static Simulator createSimulatorUsingArgs(String[] args) throws SimulationException {
+	private static Simulator createSimulatorUsingArgs(String[] args) throws SimulationException
+	{
 		int seed = Integer.parseInt(args[0]);
 		int maxQueueSize = Integer.parseInt(args[1]);
 		double meanBookings = Double.parseDouble(args[2]);
@@ -84,7 +99,8 @@ public class SimulationRunner {
 	/**
 	 *  Helper to generate usage message 
 	 */
-	private static void printErrorAndExit() {
+	private static void printErrorAndExit()
+	{
 		String str = "Usage: java asgn2Simulators.SimulationRunner [SIM Args]\n";
 		str += "SIM Args: seed maxQueueSize meanBookings sdBookings "; 
 		str += "firstProb businessProb premiumProb economyProb cancelProb\n";
@@ -92,7 +108,6 @@ public class SimulationRunner {
 		System.err.println(str);
 		System.exit(-1);
 	}
-	
 	
 	private Simulator sim;
 	private Log log; 
@@ -103,7 +118,8 @@ public class SimulationRunner {
 	 * @param sim <code>Simulator</code> containing simulation parameters
 	 * @param log <code>Log</code> object supporting record of operation 
 	 */
-	public SimulationRunner(Simulator sim, Log log) {
+	public SimulationRunner(Simulator sim, Log log)
+	{
 		this.sim = sim;
 		this.log = log;
 	}
@@ -118,29 +134,37 @@ public class SimulationRunner {
 	 * @throws IOException on logging failures See methods from {@link asgn2Simulators.Log} 
 
 	 */
-	public void runSimulation() throws AircraftException, PassengerException, SimulationException, IOException {
+	public void runSimulation() throws AircraftException, PassengerException, SimulationException, IOException
+	{
 		this.sim.createSchedule();
 		this.log.initialEntry(this.sim);
 		
 		//Main simulation loop 
-		for (int time=0; time<=Constants.DURATION; time++) {
+		for (int time=0; time<=Constants.DURATION; time++)
+		{
 			this.sim.resetStatus(time); 
 			this.sim.rebookCancelledPassengers(time); 
 			this.sim.generateAndHandleBookings(time);
 			this.sim.processNewCancellations(time);
-			if (time >= Constants.FIRST_FLIGHT) {
+			
+			if (time >= Constants.FIRST_FLIGHT)
+			{
 				this.sim.processUpgrades(time);
 				this.sim.processQueue(time);
 				this.sim.flyPassengers(time);
 				this.sim.updateTotalCounts(time); 
 				this.log.logFlightEntries(time, sim);
-			} else {
+			}
+			else
+			{
 				this.sim.processQueue(time);
 			}
+			
 			//Log progress 
 			this.log.logQREntries(time, sim);
 			this.log.logEntry(time,this.sim);
 		}
+		
 		this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION); 
 		this.log.logQREntries(Constants.DURATION, sim);
 		this.log.finalise(this.sim);

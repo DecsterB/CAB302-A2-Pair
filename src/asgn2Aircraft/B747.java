@@ -11,10 +11,11 @@ package asgn2Aircraft;
  * Specialisation of the {@link asgn2Aircraft.Aircraft} class for the Boeing B747-400. 
  * Default passenger capacities are based on the QANTAS four class configuration 
  * 
- * @author hogan
+ * @author Declan Barker
  *
  */
-public class B747 extends Aircraft {
+public class B747 extends Aircraft
+{
 	
 	static final int FIRST = 14;
 	static final int BUSINESS = 52;

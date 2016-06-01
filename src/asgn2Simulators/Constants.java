@@ -9,10 +9,11 @@ package asgn2Simulators;
 /**
  * Global constants for the simulation.
  * 
- * @author hogan
+ * @author Declan Barker
  *
  */
-public class Constants {
+public class Constants
+{
 	//Basic simulation time parameters - unchangeable 
 	//All times are given in calendar days 
 	public static final int WEEK = 7; 
