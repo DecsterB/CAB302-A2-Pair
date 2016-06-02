@@ -7,6 +7,7 @@ import org.junit.Test;
 
 import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
+import asgn2Passengers.Economy;
 import asgn2Passengers.First;
 
 public class FirstTests
@@ -16,7 +17,7 @@ public class FirstTests
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
 	final int QUEUE_TIME = 10;
-	
+	final int REFUSAL_TIME = 10;	
 	
 	/*
 	 * Test 0: Declaring passenger object.
@@ -43,6 +44,8 @@ public class FirstTests
 	 */
 	@Test public void confirmASeat() throws PassengerException
 	{
+		first = new First(BOOKING_TIME, DEPARTURE_TIME);
+		
 		assertEquals("First patron should be new or queued.", first.isNew() || first.isQueued(), true);
 
 		first.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -58,6 +61,10 @@ public class FirstTests
 	 */
 	@Test public void flyAway() throws PassengerException
 	{
+		first = new First(BOOKING_TIME, DEPARTURE_TIME);
+		
+		first.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
+		
 		assertEquals("First patron should be confirmed.", first.isConfirmed(), true);
 		
 		first.flyPassenger(DEPARTURE_TIME);
@@ -78,7 +85,7 @@ public class FirstTests
 		
 	 	first.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
 		
-		assertEquals("First patron should now be queued.", first.isNew(), true);
+		assertEquals("First patron should now be queued.", first.isQueued(), true);
 		assertEquals("First patron should have stored departure time.",
 				first.getDepartureTime() == DEPARTURE_TIME, true);
 	}
@@ -93,7 +100,7 @@ public class FirstTests
 
 		assertEquals("First patron should be new or queued.", first.isNew() || first.isQueued(), true);
 		
-	 	first.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
+	 	first.refusePassenger(REFUSAL_TIME);
 		
 		assertEquals("First patron should now be refused.", first.isRefused(), true);
 	}

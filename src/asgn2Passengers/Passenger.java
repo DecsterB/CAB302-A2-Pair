@@ -362,7 +362,8 @@ public abstract class Passenger {
 		}
 		
 		newState = false;
-		inQueue = true;
+
+		refused = true;
 		
 		this.exitQueueTime = refusalTime;
 		

@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Passengers.Business;
+import asgn2Passengers.Economy;
 import asgn2Passengers.PassengerException;
 
 public class BusinessTests
@@ -15,6 +16,7 @@ public class BusinessTests
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
 	final int QUEUE_TIME = 10;
+	final int REFUSAL_TIME = 10;
 	
 	/*
 	 * Test 0: Declaring business object.
@@ -51,6 +53,10 @@ public class BusinessTests
 	 */
 	@Test public void flyAway() throws PassengerException
 	{
+		business = new Business(BOOKING_TIME, DEPARTURE_TIME);
+		
+		business.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
+		
 		assertEquals("Business patron should be confirmed.", business.isConfirmed(), true);
 		
 		business.flyPassenger(DEPARTURE_TIME);
@@ -71,7 +77,7 @@ public class BusinessTests
 		
 	 	business.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
 		
-		assertEquals("Business patron should now be queued.", business.isNew(), true);
+		assertEquals("Business patron should now be queued.", business.isQueued(), true);
 		assertEquals("Business patron should have stored departure time.",
 				business.getDepartureTime() == DEPARTURE_TIME, true);
 	}
@@ -86,7 +92,7 @@ public class BusinessTests
 
 		assertEquals("Business patron should be new or queued.", business.isNew() || business.isQueued(), true);
 		
-	 	business.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
+	 	business.refusePassenger(REFUSAL_TIME);
 		
 		assertEquals("Business patron should now be refused.", business.isRefused(), true);
 	}

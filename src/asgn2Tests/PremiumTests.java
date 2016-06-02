@@ -5,17 +5,18 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
+import asgn2Passengers.Economy;
 import asgn2Passengers.PassengerException;
 import asgn2Passengers.Premium;
 
 public class PremiumTests
 {
-
 	//Dummy constants.
 	final int BOOKING_TIME = 10;
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
 	final int QUEUE_TIME = 10;
+	final int REFUSAL_TIME = 10;
 	
 	/*
 	 * Test 0: Declaring premium object.
@@ -52,6 +53,10 @@ public class PremiumTests
 	 */
 	@Test public void flyAway() throws PassengerException
 	{
+		premium = new Premium(BOOKING_TIME, DEPARTURE_TIME);
+		
+		premium.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
+		
 		assertEquals("Premium patron should be confirmed.", premium.isConfirmed(), true);
 		
 		premium.flyPassenger(DEPARTURE_TIME);
@@ -72,7 +77,7 @@ public class PremiumTests
 		
 	 	premium.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
 		
-		assertEquals("Premium patron should now be queued.", premium.isNew(), true);
+		assertEquals("Premium patron should now be queued.", premium.isQueued(), true);
 		assertEquals("Premium patron should have stored departure time.",
 				premium.getDepartureTime() == DEPARTURE_TIME, true);
 	}
@@ -87,8 +92,8 @@ public class PremiumTests
 
 		assertEquals("Premium patron should be new or queued.", premium.isNew() || premium.isQueued(), true);
 		
-	 	premium.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
+	 	premium.refusePassenger(REFUSAL_TIME);
 		
-		assertEquals("Premium patron should now be refused.", premium.isRefused(), true);
+		assertEquals("Economy patron should now be refused.", premium.isRefused(), true);
 	}
 }

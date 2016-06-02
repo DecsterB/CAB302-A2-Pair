@@ -5,12 +5,8 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import asgn2Passengers.Business;
 import asgn2Passengers.Economy;
-import asgn2Passengers.First;
-import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
-import asgn2Passengers.Premium;
 
 public class EconomyTests
 {
@@ -19,6 +15,7 @@ public class EconomyTests
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
 	final int QUEUE_TIME = 10;
+	final int REFUSAL_TIME = 10;
 	
 	/*
 	 * Test 0: Declaring Economy object.
@@ -55,6 +52,10 @@ public class EconomyTests
 	 */
 	@Test public void flyAway() throws PassengerException
 	{
+		economy = new Economy(BOOKING_TIME, DEPARTURE_TIME);
+		
+		economy.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
+		
 		assertEquals("Economy patron should be confirmed.", economy.isConfirmed(), true);
 		
 		economy.flyPassenger(DEPARTURE_TIME);
@@ -75,7 +76,7 @@ public class EconomyTests
 		
 	 	economy.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
 		
-		assertEquals("Economy patron should now be queued.", economy.isNew(), true);
+		assertEquals("Economy patron should now be queued.", economy.isQueued(), true);
 		assertEquals("Economy patron should have stored departure time.",
 				economy.getDepartureTime() == DEPARTURE_TIME, true);
 	}
@@ -90,7 +91,7 @@ public class EconomyTests
 
 		assertEquals("Economy patron should be new or queued.", economy.isNew() || economy.isQueued(), true);
 		
-	 	economy.queuePassenger(QUEUE_TIME, DEPARTURE_TIME);
+	 	economy.refusePassenger(REFUSAL_TIME);
 		
 		assertEquals("Economy patron should now be refused.", economy.isRefused(), true);
 	}

@@ -54,7 +54,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	
 	//Panes.
 	private static final String[] PaneNames = { "SIMULATION_PANE", "SUMMARY_PANE",
-			"GRAPH_PANE_ONE", "GRAPH_PANE_TWO" };
+			"GRAPH_PANE_ONE", "GRAPH_PANE_TWO", "TEXT_PANE" };
 	private int currentPaneIndex;
 	
 	//Pane child objects
@@ -72,6 +72,9 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	
 	//Graph pane objects.
 	ChartPanel cPanelOne, cPanelTwo;
+
+	//Text output panel.
+	JLayeredPane textOutputPane;
 	
 	/**
 	 * @param arg0
@@ -108,6 +111,20 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		createGraphPane();
 	}
 	
+	private void createTextOutputPane()
+	{
+		Point origin = new Point(15, 15);
+		
+		//Create the view pane.
+		textOutputPane = new JLayeredPane();
+		textOutputPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 60));
+		textOutputPane.setBorder(BorderFactory.createTitledBorder("View: "));
+		
+		//Text area output.
+        JTextArea textOutputArea = new JTextArea("No data.");
+        textOutputPane.add(textOutputArea);
+	}
+	
 	public void createGraphPane()
 	{		
 		//Create the graph panel object.
@@ -140,7 +157,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         
         //Page combo box.
         String paneListOptions[] = {"Simulation", "Summary", "Graph One",
-        		"Graph Two"};
+        		"Graph Two", "Text Output"};
         paneList = new JComboBox(paneListOptions);
         paneList.setBounds(origin.x, origin.y, 200, 25);
         viewPane.add(paneList);
@@ -150,17 +167,6 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         paneList.addActionListener(this);
 
         origin.x += 210;
-        
-        //View combo box.
-        /*String viewListOptions[] = {"Details", "Graph"};
-        viewList = new JComboBox(viewListOptions);
-        viewList.setBounds(origin.x, origin.y, 100, 25);
-        viewList.setEnabled(false);
-        viewPane.add(viewList);
-
-        viewList.setSelectedIndex(0);
-        viewList.setActionCommand(VIEWLIST_COMMAND);
-        viewList.addActionListener(this);*/
         
         //Add the view pane to the window.
         getContentPane().add(viewPane);
@@ -320,6 +326,10 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 				cPanelTwo.setVisible(false);
 			break;		
 			
+			case "TEXT_OUTPUT":	
+				textOutputPane.setVisible(true);
+			break;			
+			
 			default:
 				//TODO: Throw an error here because we have
 				//gone to an undefined pane.
@@ -342,9 +352,13 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			case "GRAPH_PANE_ONE":	
 	        	cPanelOne.setVisible(true);
 			break;		
-			
+
 			case "GRAPH_PANE_TWO":	
 				cPanelTwo.setVisible(true);
+			break;			
+			
+			case "TEXT_OUTPUT":	
+				textOutputPane.setVisible(true);
 			break;			
 				
 			default:
@@ -560,10 +574,5 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		firstTotalLabel.setText("Total First: " + String.valueOf(s.getTotalFirst()));
 		emptyTotalLabel.setText("Total Empty: " + String.valueOf(s.getTotalEmpty()));
 		flownTotalLabel.setText("Total Flown: " + String.valueOf(s.getTotalFlown()));		
-	}
-	
-	public void setSimulationParameters(String[] args)
-	{
-		
 	}
 }
