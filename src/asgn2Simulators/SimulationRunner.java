@@ -65,7 +65,7 @@ public class SimulationRunner
 	
 		
 		//Create the GUI.
-		if (args.length > 0)
+		if (args != null && args.length > 0)
 		{
 			gui = new GUISimulator(args[0]);
 		}
@@ -169,7 +169,7 @@ public class SimulationRunner
 			this.log.logQREntries(time, sim);
 			this.log.logEntry(time,this.sim);
 			
-			//Update chart datasets
+			//Update chart datasets.
 			gui.updateCharts(sim, time);
 		}
 		

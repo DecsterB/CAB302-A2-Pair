@@ -9,13 +9,10 @@ package asgn2Simulators;
 import asgn2Simulators.GraphPanel;
 
 import java.awt.Color;
-import java.awt.Component;
 import java.awt.Dimension;
-import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Point;
 import java.awt.Rectangle;
-import java.awt.TrayIcon.MessageType;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -28,7 +25,6 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
-import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
@@ -49,23 +45,24 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	private static final String WINDOW_TITLE = "Aircraft Bookings";
 	
 	//Action commands.
-	private static final String VIEWLIST_COMMAND = "view";
 	private static final String PANELIST_COMMAND = "page";
 	private static final String SIMULATE_COMMAND = "simulate";
 	
 	//Panes.
+	private int currentPaneIndex;
 	private static final String[] PaneNames = { "SIMULATION_PANE", "SUMMARY_PANE",
 			"GRAPH_PANE_ONE", "GRAPH_PANE_TWO", "TEXT_OUTPUT_PANE" };
-	private int currentPaneIndex;
-	
-	//Pane child objects
 	JLayeredPane viewPane, mainPane, summaryPane, graphPane;
-	JComboBox viewList, paneList;
-	JButton simulateButton;
+	
+	//Simulation pane objects.
+	JButton simulateButton;	
 	JTextField seedTextField, maxQueueTextField,
 	meanBookTextField, bookSDTextField, firstProbTextField,
 	businessProbTextField, premiumProbTextField, ecoProbTextField,
 	cancelProbTextField;
+	
+	//View pane objects.
+	JComboBox viewList, paneList;
 	
 	//Summary pane children.
 	JLabel ecoTotalLabel, businessTotalLabel, premiumTotalLabel,
@@ -74,7 +71,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	//Graph pane objects.
 	ChartPanel cPanelOne, cPanelTwo;
 
-	//Text output panel.
+	//Text output pane.
 	JLayeredPane textOutputPane;
 	JTextArea textOutputArea;
 	JScrollPane textOutputScroll;
@@ -88,11 +85,6 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	public GUISimulator(String arg0) throws HeadlessException
 	{		
 		super(WINDOW_TITLE);
-		
-		if (arg0 == null)
-		{
-			//TODO: Special case logic here.
-		}
 		
 		g = new GraphPanel();
 		currentPaneIndex = 0;
@@ -118,47 +110,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		createTextOutputPane();
 	}
 	
-	private void createTextOutputPane()
-	{
-		final int TEXT_AREA_WIDTH = 590;
-		final int TEXT_AREA_HEIGHT = 350;
-		Point origin = new Point(20, 20);
-		
-		//Create the view pane.
-		textOutputPane = new JLayeredPane();
-		textOutputPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 420));
-		textOutputPane.setBorder(BorderFactory.createTitledBorder("Text Output: "));
-		textOutputPane.setVisible(false);
-		
-		//Text area output.
-        textOutputArea = new JTextArea("No data.");
-        
-		//Text area output.
-        textOutputScroll = new JScrollPane(textOutputArea);
-        textOutputScroll.setBounds(origin.x, origin.y,
-        		TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
-
-        textOutputPane.add(textOutputScroll);
-        
-        //Add the view pane to the window.
-        getContentPane().add(textOutputPane);
-	}
-	
-	public void createGraphPane()
-	{		
-		//Create the graph panel object.
-		GraphPanel g = new GraphPanel();
-		cPanelOne = new ChartPanel(g.GetChart1());
-		cPanelTwo = new ChartPanel(g.GetChart2());
-
-		cPanelOne.setVisible(false);
-		cPanelTwo.setVisible(false);
-		
-		add(cPanelOne);
-		add(cPanelTwo);
-	}
-	
-	public void createViewPane()
+	private void createViewPane()
 	{
 		Point origin = new Point(15, 15);
 		
@@ -189,63 +141,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         getContentPane().add(viewPane);
 	}
 	
-	private JTextField addLabelledInput(JLayeredPane pane, String labelText, Rectangle bounds)
-	{
-		JTextField textField;
-		
-        JLabel aLabel = new JLabel(labelText);
-        aLabel.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
-        pane.add(aLabel);
-        
-        bounds.y += bounds.height;
-        
-        textField = new JTextField();
-        textField.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
-        
-        return textField;
-	}
-	
-	private JLabel addLabel(JLayeredPane pane, String labelText, Rectangle bounds)
-	{
-        JLabel aLabel;
-        aLabel = new JLabel(labelText);
-        aLabel.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
-        pane.add(aLabel);
-
-        bounds.x += bounds.width;
-        
-        return aLabel;
-	}
-	
-	public void createSummaryPane()
-	{    
-		final int ORIGIN_X = 15;
-		final int ORIGIN_Y = 15;
-		final int TEXT_WIDTH = 180;
-		final int TEXT_HEIGHT = 25;
-		Rectangle bounds = new Rectangle(ORIGIN_X, ORIGIN_Y, TEXT_WIDTH, TEXT_HEIGHT);
-		
-		//Create the simulation pane.
-		summaryPane = new JLayeredPane();
-		summaryPane.setVisible(false);
-		summaryPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 420));
-		summaryPane.setBorder(BorderFactory.createTitledBorder("Summary: "));
-
-		ecoTotalLabel = addLabel(summaryPane, "Total Economy: ", bounds);
-		businessTotalLabel = addLabel(summaryPane, "Total Business: ", bounds);
-		premiumTotalLabel = addLabel(summaryPane, "Total Premium: ", bounds);
-		
-		bounds.setLocation(ORIGIN_X, bounds.y + TEXT_HEIGHT);
-		
-		firstTotalLabel = addLabel(summaryPane, "Total First: ", bounds);		
-		emptyTotalLabel = addLabel(summaryPane, "Total Empty: ", bounds);
-		flownTotalLabel = addLabel(summaryPane, "Flown Empty: ", bounds);
-        
-        //Add main pane to window.
-        getContentPane().add(summaryPane);
-	}
-	
-	public void createSimulationPane()
+	private void createSimulationPane()
 	{    
 		final int ORIGIN_X = 15;
 		final int ORIGIN_Y = 15;
@@ -321,69 +217,104 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         
         //Add main pane to window.
         getContentPane().add(mainPane);
-	}
-	
-	private void switchPaneFrom(String paneName)
-	{
-		switch (paneName)
-		{
-			case "SIMULATION_PANE":
-	        	mainPane.setVisible(false);
-			break;
-			
-			case "SUMMARY_PANE":	
-	        	summaryPane.setVisible(false);
-			break;			
-
-			case "GRAPH_PANE_ONE":	
-	        	cPanelOne.setVisible(false);
-			break;		
-			
-			case "GRAPH_PANE_TWO":	
-				cPanelTwo.setVisible(false);
-			break;		
-			
-			case "TEXT_OUTPUT_PANE":	
-				textOutputPane.setVisible(false);
-			break;			
-			
-			default:
-				//TODO: Throw an error here because we have
-				//gone to an undefined pane.
-			break;
-		}
-	}
-	
-	private void switchPaneTo(String paneName)
-	{
-		switch (paneName)
-		{
-			case "SIMULATION_PANE":
-	        	mainPane.setVisible(true); 
-			break;
-
-			case "SUMMARY_PANE":	
-	        	summaryPane.setVisible(true);
-			break;		
-
-			case "GRAPH_PANE_ONE":	
-	        	cPanelOne.setVisible(true);
-			break;		
-
-			case "GRAPH_PANE_TWO":	
-				cPanelTwo.setVisible(true);
-			break;			
-			
-			case "TEXT_OUTPUT_PANE":	
-				textOutputPane.setVisible(true);
-			break;			
-				
-			default:
-				//TODO: Throw an error here because we have
-				//gone to an undefined pane.
-			break;
-		}
 	}	
+	
+	private void createSummaryPane()
+	{    
+		final int ORIGIN_X = 15;
+		final int ORIGIN_Y = 15;
+		final int TEXT_WIDTH = 180;
+		final int TEXT_HEIGHT = 25;
+		Rectangle bounds = new Rectangle(ORIGIN_X, ORIGIN_Y, TEXT_WIDTH, TEXT_HEIGHT);
+		
+		//Create the simulation pane.
+		summaryPane = new JLayeredPane();
+		summaryPane.setVisible(false);
+		summaryPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 420));
+		summaryPane.setBorder(BorderFactory.createTitledBorder("Summary: "));
+
+		ecoTotalLabel = addLabel(summaryPane, "Total Economy: ", bounds);
+		businessTotalLabel = addLabel(summaryPane, "Total Business: ", bounds);
+		premiumTotalLabel = addLabel(summaryPane, "Total Premium: ", bounds);
+		
+		bounds.setLocation(ORIGIN_X, bounds.y + TEXT_HEIGHT);
+		
+		firstTotalLabel = addLabel(summaryPane, "Total First: ", bounds);		
+		emptyTotalLabel = addLabel(summaryPane, "Total Empty: ", bounds);
+		flownTotalLabel = addLabel(summaryPane, "Flown Empty: ", bounds);
+        
+        //Add main pane to window.
+        getContentPane().add(summaryPane);
+	}
+	
+	private void createGraphPane()
+	{		
+		//Create the graph panel object.
+		GraphPanel g = new GraphPanel();
+		cPanelOne = new ChartPanel(g.GetChart1());
+		cPanelTwo = new ChartPanel(g.GetChart2());
+
+		cPanelOne.setVisible(false);
+		cPanelTwo.setVisible(false);
+		
+		add(cPanelOne);
+		add(cPanelTwo);
+	}
+	
+	private void createTextOutputPane()
+	{
+		final int TEXT_AREA_WIDTH = 590;
+		final int TEXT_AREA_HEIGHT = 350;
+		Point origin = new Point(20, 20);
+		
+		//Create the view pane.
+		textOutputPane = new JLayeredPane();
+		textOutputPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 420));
+		textOutputPane.setBorder(BorderFactory.createTitledBorder("Text Output: "));
+		textOutputPane.setVisible(false);
+		
+		//Text area output.
+        textOutputArea = new JTextArea("No data.");
+        
+		//Text area output.
+        textOutputScroll = new JScrollPane(textOutputArea);
+        textOutputScroll.setBounds(origin.x, origin.y,
+        		TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
+
+        textOutputPane.add(textOutputScroll);
+        
+        //Add the view pane to the window.
+        getContentPane().add(textOutputPane);
+	}
+	
+	private void switchPane(String paneName, boolean visible)
+	{
+		switch (paneName)
+		{
+			case "SIMULATION_PANE":
+	        	mainPane.setVisible(visible);
+			break;
+			
+			case "SUMMARY_PANE":	
+	        	summaryPane.setVisible(visible);
+			break;			
+
+			case "GRAPH_PANE_ONE":	
+	        	cPanelOne.setVisible(visible);
+			break;		
+			
+			case "GRAPH_PANE_TWO":	
+				cPanelTwo.setVisible(visible);
+			break;		
+			
+			case "TEXT_OUTPUT_PANE":	
+				textOutputPane.setVisible(visible);
+			break;			
+			
+			default:
+				return;
+		}
+	}
 	
     /*
      * Component events.
@@ -398,11 +329,11 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         	int newIndex = paneList.getSelectedIndex();
 
         	//Hide pane at the index we are switching away from.
-        	switchPaneFrom(PaneNames[currentPaneIndex]);
+        	switchPane(PaneNames[currentPaneIndex], false);
         	currentPaneIndex = newIndex;
         	
         	//Switching to new pane.
-        	switchPaneTo(PaneNames[newIndex]);    		
+        	switchPane(PaneNames[newIndex], true);  		
         }
         else if (cmd.contentEquals(SIMULATE_COMMAND))
         {
@@ -441,7 +372,6 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			simulateButton.setEnabled(true);
 			
 			setSummaryLabels(s);
-			updateCharts(s);
 			
 			try
 			{
@@ -471,14 +401,12 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     	textOutputArea.setText(str);
     }
     
-    private void updateCharts(Simulator s)
-    {
-    	
-    }
-    
+    /*
+     * Takes the results of the latest simulation and applies it to the
+     * graphs by regenerating them.
+     */
     public void updateCharts(Simulator s, int time)
     {
-		
 		g.UpdateChart(s, time);
 		
 		cPanelOne = new ChartPanel(g.GetChart1());
@@ -493,7 +421,12 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     
     private Simulator parseSimulationPage() throws SimulationException
     {
-    	Simulator s;
+    	final double MIN_PROB = 0.0;
+    	final double MAX_PROB = 1.0;
+    	final int MIN_OTHER = 0;
+    	final int MAX_OTHER = 10000;
+
+    	Simulator s;    	
     	int seed = 0, maxQueue = 0;
     	double meanBook = 0.0, firstProb = 0.0, businessProb = 0.0,
     	bookSD = 0.0, premiumProb = 0.0, ecoProb = 0.0, cancelProb = 0.0;
@@ -501,15 +434,16 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     	resetSimulationInputs();
     	
     	//Get values from GUI inputs.
-    	seed = (int)verifySimulationInput(seedTextField, 0, 10000);
-    	maxQueue = (int)verifySimulationInput(maxQueueTextField, 0, 10000);
-    	meanBook = verifySimulationInput(meanBookTextField, 0, 10000);
-    	bookSD = verifySimulationInput(bookSDTextField, 0, 10000);
-    	firstProb = verifySimulationInput(firstProbTextField, 0, 1);
-    	businessProb = verifySimulationInput(businessProbTextField, 0, 1);
-    	premiumProb = verifySimulationInput(premiumProbTextField, 0, 1);
-    	ecoProb = verifySimulationInput(ecoProbTextField, 0, 1);
-    	cancelProb = verifySimulationInput(cancelProbTextField, 0, 1);
+    	seed = (int)verifySimulationInput(seedTextField, MIN_OTHER, MAX_OTHER);
+    	maxQueue = (int)verifySimulationInput(maxQueueTextField, MIN_OTHER, MAX_OTHER);
+    	meanBook = verifySimulationInput(meanBookTextField, MIN_OTHER, MAX_OTHER);
+    	bookSD = verifySimulationInput(bookSDTextField, MIN_OTHER, MAX_OTHER);
+    	
+    	firstProb = verifySimulationInput(firstProbTextField, MIN_PROB, MAX_PROB);
+    	businessProb = verifySimulationInput(businessProbTextField, MIN_PROB, MAX_PROB);
+    	premiumProb = verifySimulationInput(premiumProbTextField, MIN_PROB, MAX_PROB);
+    	ecoProb = verifySimulationInput(ecoProbTextField, MIN_PROB, MAX_PROB);
+    	cancelProb = verifySimulationInput(cancelProbTextField, MIN_PROB, MAX_PROB);
     	
     	if (seed == -1 || maxQueue == -1 || meanBook == -1 || bookSD == -1 || firstProb == -1
     			|| businessProb == -1 || premiumProb == -1 || ecoProb == -1 || cancelProb == -1)
@@ -526,6 +460,9 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		return s;
     }
     
+    /*
+     * Resets the text colour after a Simulator input has been flagged as an error.
+     */
     private void resetSimulationInputs()
     {
     	seedTextField.setForeground(Color.BLACK);
@@ -539,10 +476,15 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     	cancelProbTextField.setForeground(Color.BLACK);
     }
     
-    private double verifySimulationInput(JTextField textField, int min, int max)
+    /*
+     * Takes a single simulation input and checks to see if it is valid.
+     */
+    private double verifySimulationInput(JTextField textField,
+    		double min, double max)
     {
     	double result = 0.0;
     	
+    	//Parse integer from string check.
     	try
     	{
     		result = Double.parseDouble(textField.getText());
@@ -553,6 +495,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     		return -1.0;
     	}
     	
+    	//Between min and max check.
     	if (result < min || result > max)
     	{
     		textField.setForeground(Color.RED);
@@ -580,6 +523,10 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         setVisible(true);
 	}
 	
+	/*
+	 * Pre-condition: Validate user input values.
+	 * Attempts to run the simulation with the values entered into the Simulator pane.
+	 */
 	public void runSimulation(Simulator sim, Log log)
 	{				
 		//Run the simulation 
@@ -612,7 +559,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	}
 	
 	/*
-	 * Sets the text fields in the simulation page to their default values.
+	 * Sets the text labels in the summary pane to their respective values.
 	 */
 	private void setSummaryLabels(Simulator s)
 	{
@@ -622,5 +569,36 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		firstTotalLabel.setText("Total First: " + String.valueOf(s.getTotalFirst()));
 		emptyTotalLabel.setText("Total Empty: " + String.valueOf(s.getTotalEmpty()));
 		flownTotalLabel.setText("Total Flown: " + String.valueOf(s.getTotalFlown()));		
+	}
+	
+	/*
+	 * Pane input helper methods.
+	 */	
+	private JTextField addLabelledInput(JLayeredPane pane, String labelText, Rectangle bounds)
+	{
+		JTextField textField;
+		
+        JLabel aLabel = new JLabel(labelText);
+        aLabel.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        pane.add(aLabel);
+        
+        bounds.y += bounds.height;
+        
+        textField = new JTextField();
+        textField.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        
+        return textField;
+	}
+	
+	private JLabel addLabel(JLayeredPane pane, String labelText, Rectangle bounds)
+	{
+        JLabel aLabel;
+        aLabel = new JLabel(labelText);
+        aLabel.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        pane.add(aLabel);
+
+        bounds.x += bounds.width;
+        
+        return aLabel;
 	}
 }

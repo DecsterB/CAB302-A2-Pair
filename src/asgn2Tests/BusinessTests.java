@@ -6,12 +6,10 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Passengers.Business;
-import asgn2Passengers.Economy;
 import asgn2Passengers.PassengerException;
 
 public class BusinessTests
 {
-	//Dummy constants.
 	final int BOOKING_TIME = 10;
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;

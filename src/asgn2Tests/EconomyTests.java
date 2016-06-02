@@ -10,7 +10,6 @@ import asgn2Passengers.PassengerException;
 
 public class EconomyTests
 {
-	//Dummy constants.
 	final int BOOKING_TIME = 10;
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
