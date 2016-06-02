@@ -19,9 +19,8 @@ public class Business extends Passenger {
 	 * @throws PassengerException if invalid bookingTime or departureTime 
 	 * @see asgnPassengers.Passenger#Passenger(int,int)
 	 */
-	public Business(int bookingTime, int departureTime) throws PassengerException {
-		//TODO: (Declan)
-		//See Economy constructor.
+	public Business(int bookingTime, int departureTime) throws PassengerException
+	{
 		super(bookingTime, departureTime);
 		
 		this.passID = "J:" + this.passID;
@@ -45,7 +44,6 @@ public class Business extends Passenger {
 		First upgradePassenger = new First();
 		copyPassengerState(upgradePassenger);
 		
-		return upgradePassenger;
-		
+		return upgradePassenger;		
 	}
 }

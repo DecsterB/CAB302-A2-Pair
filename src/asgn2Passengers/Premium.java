@@ -20,8 +20,6 @@ public class Premium extends Passenger {
 	 * @see asgnPassengers.Passenger#Passenger(int,int)
 	 */
 	public Premium(int bookingTime,int departureTime) throws PassengerException {
-		//TODO: (Declan)
-		//See Economy constructor.
 		super(bookingTime, departureTime);
 		
 		this.passID = "P:" + this.passID;

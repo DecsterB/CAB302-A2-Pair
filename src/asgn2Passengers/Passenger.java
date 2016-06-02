@@ -439,7 +439,4 @@ public abstract class Passenger {
 		p.departureTime = departureTime;
 		 
 	}
-	
-	//Various private helper methods to check arguments and throw exceptions
-
 }

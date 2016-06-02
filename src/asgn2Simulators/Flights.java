@@ -27,7 +27,6 @@ import asgn2Passengers.PassengerException;
  */
 public class Flights
 {
-	
 	private List<Aircraft> daily;
 	private Bookings counts; 
 

@@ -88,16 +88,13 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	public GUISimulator(String arg0) throws HeadlessException
 	{		
 		super(WINDOW_TITLE);
-<<<<<<< HEAD
-
-=======
 		
 		if (arg0 == null)
 		{
 			//TODO: Special case logic here.
 		}
+		
 		g = new GraphPanel();
->>>>>>> 963780467d30bbc6997ab540e46c86e5f37d63e3
 		currentPaneIndex = 0;
 		createGUI();
 	}
@@ -444,7 +441,6 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			simulateButton.setEnabled(true);
 			
 			setSummaryLabels(s);
-<<<<<<< HEAD
 			updateCharts(s);
 			
 			try
@@ -476,12 +472,11 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     }
     
     private void updateCharts(Simulator s)
-=======
-        }
+    {
+    	
     }
     
     public void updateCharts(Simulator s, int time)
->>>>>>> 963780467d30bbc6997ab540e46c86e5f37d63e3
     {
 		
 		g.UpdateChart(s, time);

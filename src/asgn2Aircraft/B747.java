@@ -16,7 +16,6 @@ package asgn2Aircraft;
  */
 public class B747 extends Aircraft
 {
-	
 	static final int FIRST = 14;
 	static final int BUSINESS = 52;
 	static final int PREMIUM = 32;
@@ -49,5 +48,4 @@ public class B747 extends Aircraft
 		
 		this.type = "B747";
 	}
-
 }

@@ -40,7 +40,6 @@ import asgn2Simulators.Log;
  */
 public abstract class Aircraft
 {
-
 	protected int firstCapacity;
 	protected int businessCapacity;
 	protected int premiumCapacity;
@@ -139,7 +138,6 @@ public abstract class Aircraft
 		//Update status string for aircraft.
 		this.status += Log.setPassengerMsg(p,"C","N");
 		
-		//Remove passenger from the seat storage for the aircraft.
 		//seats.remove(p);
 		decrementPassenger(p);
 	}
@@ -186,11 +184,14 @@ public abstract class Aircraft
 	 * 
 	 * @return <code>String</code> containing dump of final aircraft state 
 	 */
-	public String finalState() {
+	public String finalState()
+	{
 		String str = aircraftIDString() + " Pass: " + this.seats.size() + "\n";
-		for (Passenger p : this.seats) {
+		for (Passenger p : this.seats)
+		{
 			str += p.toString() + "\n";
 		}
+		
 		return str + "\n";
 	}
 	
@@ -448,8 +449,6 @@ public abstract class Aircraft
 	 */
 	public void upgradeBookings()
 	{
-		//TODO: Sort the list and do one generic loop rather than passes.
-		
 		//Business pass.
 		for (int i = 0; i < seats.size(); i++)
 		{	
@@ -513,10 +512,11 @@ public abstract class Aircraft
 	}
 
 
-	//Various private helper methods to check arguments and throw exceptions, to increment 
-	//or decrement counts based on the class of the Passenger, and to get the number of seats 
-	//available in a particular class
-	
+	/*
+	 * Various private helper methods to check arguments and throw exceptions, to increment
+	 * or decrement counts based on the class of the Passenger, and to get the number of seats 
+	 * available in a particular class 
+	 */	
 	private void decrementPassenger(Passenger p)
 	{
 		char fareClass = p.getPassID().charAt(0);
