@@ -1,7 +1,13 @@
 package asgn2Simulators;
 
+import java.awt.Color;
+
 import org.jfree.chart.*;
+import org.jfree.chart.axis.CategoryAxis;
+import org.jfree.chart.axis.ValueAxis;
+import org.jfree.chart.plot.CategoryPlot;
 import org.jfree.chart.plot.PlotOrientation;
+import org.jfree.chart.renderer.category.LineAndShapeRenderer;
 import org.jfree.data.*;
 import org.jfree.data.category.DefaultCategoryDataset;
 
@@ -18,7 +24,7 @@ public class GraphPanel {
 		String totalTotalLabel  = "Total";
 		String totalEmptyLabel  = "Empty";
 		//--Chart 1 Graph Settings------
-		String chart1Title = "Class Passengers vs Time";
+		String chart1Title = "Passengers vs Time by Class";
 		String chart1YAxis = "Number of Passengers";
 		String chart1XAxis = "time";
 		PlotOrientation chart1Orientation = PlotOrientation.VERTICAL;
@@ -40,9 +46,9 @@ public class GraphPanel {
 		String queued = "Queue";
 		String refused = "Refused";
 		//--Chart 2 Graph settings----
-		String chart2Title = "Chart1";
-		String chart2YAxis = "Number of Passengers";
-		String chart2XAxis = "time";
+		String chart2Title = "Number of Passengers Queued or Refused vs Time";
+		String chart2YAxis = "Day";
+		String chart2XAxis = "Number of Passengers";
 		PlotOrientation chart2Orientation = PlotOrientation.VERTICAL;
 		Boolean chart2Legend = true;
 		Boolean chart2ToolTips = true;
@@ -70,8 +76,8 @@ public class GraphPanel {
 								prevTotalBookings;
 		int dayTotalEconomy = sim.getTotalEconomy() - prevTotalEconomy;
 		int dayTotalPremium = sim.getTotalPremium() - prevTotalPremium;
-		int dayTotalBusiness = sim.getTotalEconomy() - prevTotalEconomy;
-		int dayTotalFirst = sim.getTotalEconomy() - prevTotalEconomy;
+		int dayTotalBusiness = sim.getTotalBusiness() - prevTotalBusiness;
+		int dayTotalFirst = sim.getTotalFirst() - prevTotalFirst;
 		int dayTotalEmpty = sim.getTotalEmpty() - prevTotalEmpty;
 		
 		chart1Dataset.addValue(dayTotalEconomy, totalEconomyLabel, catTime);
@@ -80,6 +86,7 @@ public class GraphPanel {
 		chart1Dataset.addValue(dayTotalFirst, totalFirstLabel, catTime);
 		chart1Dataset.addValue(dayTotalBookings, totalTotalLabel, catTime);
 		chart1Dataset.addValue(dayTotalEmpty, totalEmptyLabel, catTime);
+		
 		
 		//Add simulator values to chart2 dataset
 		chart2Dataset.addValue(sim.numInQueue(), queued, catTime);
@@ -98,13 +105,36 @@ public class GraphPanel {
 	}
 	
 	public JFreeChart GetChart1(){	
-		return ChartFactory.createLineChart(chart1Title, chart1YAxis, chart1XAxis, 
+		JFreeChart JFChart1 =  ChartFactory.createLineChart(chart1Title, chart1YAxis, chart1XAxis, 
 				chart1Dataset, chart1Orientation, chart1Legend, chart1ToolTips, chart1URLS);
+		
+		CategoryPlot JFChartCatPlot = JFChart1.getCategoryPlot();
+		LineAndShapeRenderer renderer = new LineAndShapeRenderer();
+		JFChartCatPlot.setRenderer(renderer);
+		renderer.setShapesVisible(false);
+		renderer.setSeriesPaint(0, Color.GRAY);
+		renderer.setSeriesPaint(1, Color.CYAN);
+		renderer.setSeriesPaint(2, Color.BLUE);
+		renderer.setSeriesPaint(3, Color.BLACK);
+		renderer.setSeriesPaint(4, Color.GREEN);
+		renderer.setSeriesPaint(5, Color.RED);
+		
+		return JFChart1;
 	}
 	
 	public JFreeChart GetChart2(){
-		return ChartFactory.createLineChart(chart2Title, chart2YAxis, chart2XAxis, 
+		
+		JFreeChart JFChart2 = ChartFactory.createLineChart(chart2Title, chart2YAxis, chart2XAxis, 
 				chart2Dataset, chart2Orientation, chart2Legend, chart2ToolTips, chart2URLS);
+		
+		CategoryPlot JFChartCatPlot = JFChart2.getCategoryPlot();
+		LineAndShapeRenderer renderer = new LineAndShapeRenderer();
+		JFChartCatPlot.setRenderer(renderer);
+		renderer.setShapesVisible(false);
+		renderer.setSeriesPaint(0, Color.BLACK);
+		renderer.setSeriesPaint(1, Color.RED);
+		
+		return JFChart2;
 	}
 	
 }
