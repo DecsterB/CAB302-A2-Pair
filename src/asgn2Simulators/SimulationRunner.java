@@ -20,6 +20,8 @@ import asgn2Passengers.PassengerException;
  */ 
 public class SimulationRunner
 {
+	
+	static GUISimulator gui;
 	/**
 	 * Main program for the simulation 
 	 * 
@@ -31,7 +33,7 @@ public class SimulationRunner
 		final int NUM_ARGS = 9; 
 		Simulator s = null; 
 		Log l = null;
-		GUISimulator gui = null;
+		gui = null;
 		
 		try
 		{
@@ -166,6 +168,9 @@ public class SimulationRunner
 			//Log progress.			
 			this.log.logQREntries(time, sim);
 			this.log.logEntry(time,this.sim);
+			
+			//Update chart datasets
+			gui.updateCharts(sim, time);
 		}
 		
 		this.sim.finaliseQueuedAndCancelledPassengers(Constants.DURATION); 

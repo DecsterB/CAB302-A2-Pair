@@ -76,6 +76,8 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	//Text output panel.
 	JLayeredPane textOutputPane;
 	
+	GraphPanel g;
+	
 	/**
 	 * @param arg0
 	 * @throws HeadlessException
@@ -88,7 +90,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		{
 			//TODO: Special case logic here.
 		}
-
+		g = new GraphPanel();
 		currentPaneIndex = 0;
 		createGUI();
 	}
@@ -424,14 +426,13 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			simulateButton.setEnabled(true);
 			
 			setSummaryLabels(s);
-			updateCharts(s);
         }
     }
     
-    private void updateCharts(Simulator s)
+    public void updateCharts(Simulator s, int time)
     {
-		GraphPanel g = new GraphPanel();
-		g.UpdateChart(s, 10);
+		
+		g.UpdateChart(s, time);
 		
 		cPanelOne = new ChartPanel(g.GetChart1());
 		cPanelTwo = new ChartPanel(g.GetChart2());
