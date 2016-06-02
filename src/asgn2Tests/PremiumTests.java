@@ -84,7 +84,7 @@ public class PremiumTests
 	
 	
 	/*
-	 * Test 5: Refuse an premium passenger.
+	 * Test 5: Refuse a premium passenger.
 	 */
 	@Test public void refusePassenger() throws PassengerException
 	{	

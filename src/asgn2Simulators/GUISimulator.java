@@ -29,6 +29,7 @@ import javax.swing.JLabel;
 import javax.swing.JLayeredPane;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextField;
 
@@ -54,7 +55,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	
 	//Panes.
 	private static final String[] PaneNames = { "SIMULATION_PANE", "SUMMARY_PANE",
-			"GRAPH_PANE_ONE", "GRAPH_PANE_TWO", "TEXT_PANE" };
+			"GRAPH_PANE_ONE", "GRAPH_PANE_TWO", "TEXT_OUTPUT_PANE" };
 	private int currentPaneIndex;
 	
 	//Pane child objects
@@ -75,19 +76,16 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 
 	//Text output panel.
 	JLayeredPane textOutputPane;
+	JTextArea textOutputArea;
+	JScrollPane textOutputScroll;
 	
 	/**
 	 * @param arg0
 	 * @throws HeadlessException
 	 */
 	public GUISimulator(String arg0) throws HeadlessException
-	{
+	{		
 		super(WINDOW_TITLE);
-		
-		if (arg0 == null)
-		{
-			//TODO: Special case logic here.
-		}
 
 		currentPaneIndex = 0;
 		createGUI();
@@ -109,20 +107,33 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		createSimulationPane();
 		createSummaryPane();
 		createGraphPane();
+		createTextOutputPane();
 	}
 	
 	private void createTextOutputPane()
 	{
-		Point origin = new Point(15, 15);
+		final int TEXT_AREA_WIDTH = 590;
+		final int TEXT_AREA_HEIGHT = 350;
+		Point origin = new Point(20, 20);
 		
 		//Create the view pane.
 		textOutputPane = new JLayeredPane();
-		textOutputPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 60));
-		textOutputPane.setBorder(BorderFactory.createTitledBorder("View: "));
+		textOutputPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 420));
+		textOutputPane.setBorder(BorderFactory.createTitledBorder("Text Output: "));
+		textOutputPane.setVisible(false);
 		
 		//Text area output.
-        JTextArea textOutputArea = new JTextArea("No data.");
-        textOutputPane.add(textOutputArea);
+        textOutputArea = new JTextArea("No data.");
+        
+		//Text area output.
+        textOutputScroll = new JScrollPane(textOutputArea);
+        textOutputScroll.setBounds(origin.x, origin.y,
+        		TEXT_AREA_WIDTH, TEXT_AREA_HEIGHT);
+
+        textOutputPane.add(textOutputScroll);
+        
+        //Add the view pane to the window.
+        getContentPane().add(textOutputPane);
 	}
 	
 	public void createGraphPane()
@@ -165,8 +176,6 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         paneList.setSelectedIndex(0);
         paneList.setActionCommand(PANELIST_COMMAND);
         paneList.addActionListener(this);
-
-        origin.x += 210;
         
         //Add the view pane to the window.
         getContentPane().add(viewPane);
@@ -326,8 +335,8 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 				cPanelTwo.setVisible(false);
 			break;		
 			
-			case "TEXT_OUTPUT":	
-				textOutputPane.setVisible(true);
+			case "TEXT_OUTPUT_PANE":	
+				textOutputPane.setVisible(false);
 			break;			
 			
 			default:
@@ -357,7 +366,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 				cPanelTwo.setVisible(true);
 			break;			
 			
-			case "TEXT_OUTPUT":	
+			case "TEXT_OUTPUT_PANE":	
 				textOutputPane.setVisible(true);
 			break;			
 				
@@ -425,7 +434,33 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			
 			setSummaryLabels(s);
 			updateCharts(s);
+			
+			try
+			{
+				outputToTextArea(s);
+			}
+			catch (SimulationException e1)
+			{
+				e1.printStackTrace();
+			}
         }
+    }
+    
+    private void outputToTextArea(Simulator s) throws SimulationException
+    {
+    	String str = "";
+    	
+    	for (int i = Constants.FIRST_FLIGHT; i < Constants.DURATION; i++)
+    	{
+    		str += i + ":" + " F:" + s.getFlightStatus(i).getNumFirst() +
+    				" J:" + s.getFlightStatus(i).getNumBusiness() +
+    				" P:" + s.getFlightStatus(i).getNumPremium() +
+    				" Y:" + s.getFlightStatus(i).getNumEconomy() +
+    				" T:" + s.getFlightStatus(i).getTotal() +
+    				" A:" + s.getFlightStatus(i).getAvailable() + "\n\n";
+    	}
+    	
+    	textOutputArea.setText(str);
     }
     
     private void updateCharts(Simulator s)
