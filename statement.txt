@@ -1,0 +1,19 @@
+Student Names:
+Declan Barker, 
+
+Student IDs:
+N9434721, 
+
+Statement of Contribution:
+Declan:
+Aircraft classes
+Passenger testing
+GUI implementation
+
+Statement of Completeness:
+Both the GUI and the text output can be seen within this project.
+
+Statement of Agreement:
+Declan:
+I agree to this thing.
+
