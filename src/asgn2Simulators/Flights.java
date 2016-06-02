@@ -7,6 +7,7 @@
 package asgn2Simulators;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 
@@ -77,13 +78,16 @@ public class Flights
 		List<Passenger> cancelled = new ArrayList<Passenger>(); 
 		for (Aircraft a : this.daily)
 		{
-			List<Passenger> passengers =  a.getPassengers();
-			for (Passenger p : passengers)
+			Iterator<Passenger> iter =  a.getPassengers().iterator();
+			while (iter.hasNext())
 			{
+				Passenger p = iter.next();
+				
 				if (Simulator.randomSuccess(rng, cancelProb))
 				{
 					a.cancelBooking(p, cancelTime);
 					cancelled.add(p);
+					iter.remove();
 				}
 			}
 		}

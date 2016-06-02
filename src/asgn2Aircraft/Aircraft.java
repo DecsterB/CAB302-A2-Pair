@@ -81,10 +81,13 @@ public abstract class Aircraft
 		
 		this.flightCode = flightCode;
 		this.departureTime = departureTime;
+		
 		this.firstCapacity = first;
 		this.businessCapacity = business;
 		this.premiumCapacity = premium;
 		this.economyCapacity = economy;		
+		
+		this.capacity = this.firstCapacity + this.businessCapacity + this.premiumCapacity + this.economyCapacity;	
 		
 		this.status = "";
 		
@@ -135,7 +138,7 @@ public abstract class Aircraft
 		this.status += Log.setPassengerMsg(p,"C","N");
 		
 		//Remove passenger from the seat storage for the aircraft.
-		seats.remove(p);		
+		//seats.remove(p);
 		decrementPassenger(p);
 	}
 
@@ -151,7 +154,7 @@ public abstract class Aircraft
 	 */
 	public void confirmBooking(Passenger p, int confirmationTime) throws AircraftException, PassengerException
 	{
-		if (!p.isNew() || !p.isQueued())
+		if (!p.isNew() && !p.isQueued())
 		{
 			throw new PassengerException("Passenger couldn't be booked because they're neither new or queued.");
 		}
@@ -381,15 +384,7 @@ public abstract class Aircraft
 	 */
 	public boolean seatsAvailable(Passenger p)
 	{
-		char fareClass = '-';
-		
-		for (int i = 0; i < seats.size(); i++)
-		{
-			if (seats.get(i) == p)
-			{
-				fareClass = p.getPassID().charAt(0);
-			}
-		}
+		char fareClass = p.getPassID().charAt(0);
 		
 		switch (fareClass)
 		{
@@ -509,15 +504,7 @@ public abstract class Aircraft
 	
 	private void decrementPassenger(Passenger p)
 	{
-		char fareClass = '-';
-		
-		for (int i = 0; i < seats.size(); i++)
-		{
-			if (seats.get(i) == p)
-			{
-				fareClass = p.getPassID().charAt(0);
-			}
-		}
+		char fareClass = p.getPassID().charAt(0);
 		
 		switch (fareClass)
 		{
@@ -544,15 +531,7 @@ public abstract class Aircraft
 
 	private void incrementPassenger(Passenger p)
 	{
-		char fareClass = '-';
-		
-		for (int i = 0; i < seats.size(); i++)
-		{
-			if (seats.get(i) == p)
-			{
-				fareClass = p.getPassID().charAt(0);
-			}
-		}
+		char fareClass = p.getPassID().charAt(0);
 		
 		switch (fareClass)
 		{

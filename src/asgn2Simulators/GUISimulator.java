@@ -51,13 +51,17 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	private int currentPaneIndex;
 	
 	//Pane child objects
-	JLayeredPane viewPane, mainPane;
+	JLayeredPane viewPane, mainPane, summaryPane;
 	JComboBox viewList, paneList;
 	JButton simulateButton;
 	JTextField seedTextField, maxQueueTextField,
 	meanBookTextField, bookSDTextField, firstProbTextField,
 	businessProbTextField, premiumProbTextField, ecoProbTextField,
 	cancelProbTextField;
+	
+	//Summary pane children.
+	JLabel ecoTotalLabel, businessTotalLabel, premiumTotalLabel,
+	firstTotalLabel, emptyTotalLabel;
 	
 	/**
 	 * @param arg0
@@ -90,6 +94,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         //Actually create the window components.
 		createViewPane();
 		createSimulationPane();
+		createSummaryPane();
 	}
 	
 	public void createViewPane()
@@ -149,6 +154,45 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         textField.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
         
         return textField;
+	}
+	
+	private JLabel addLabel(JLayeredPane pane, String labelText, Rectangle bounds)
+	{
+        JLabel aLabel;
+        aLabel = new JLabel(labelText);
+        aLabel.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        pane.add(aLabel);
+
+        bounds.x += bounds.width;
+        
+        return aLabel;
+	}
+	
+	public void createSummaryPane()
+	{    
+		final int ORIGIN_X = 15;
+		final int ORIGIN_Y = 15;
+		final int TEXT_WIDTH = 180;
+		final int TEXT_HEIGHT = 25;
+		Rectangle bounds = new Rectangle(ORIGIN_X, ORIGIN_Y, TEXT_WIDTH, TEXT_HEIGHT);
+		
+		//Create the simulation pane.
+		summaryPane = new JLayeredPane();
+		summaryPane.setVisible(false);
+		summaryPane.setPreferredSize(new Dimension(WINDOW_WIDTH, 420));
+		summaryPane.setBorder(BorderFactory.createTitledBorder("Summary: "));
+
+		ecoTotalLabel = addLabel(summaryPane, "Total Economy: ", bounds);
+		businessTotalLabel = addLabel(summaryPane, "Total Business: ", bounds);
+		premiumTotalLabel = addLabel(summaryPane, "Total Premium: ", bounds);
+		
+		bounds.setLocation(ORIGIN_X, bounds.y + TEXT_HEIGHT);
+		
+		firstTotalLabel = addLabel(summaryPane, "Total First: ", bounds);		
+		emptyTotalLabel = addLabel(summaryPane, "Total Empty: ", bounds);
+        
+        //Add main pane to window.
+        getContentPane().add(summaryPane);
 	}
 	
 	public void createSimulationPane()
@@ -237,7 +281,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			break;
 			
 			case "SUMMARY_PANE":	
-	        	//mainPane.setVisible(hide);   
+	        	summaryPane.setVisible(hide);   
 			break;			
 				
 			default:
@@ -291,12 +335,8 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			{
 				e1.printStackTrace();
 			}
-
-			simulateButton.setEnabled(false);
-			this.update(getGraphics());
 			
     		this.runSimulation(s, l);
-			simulateButton.setEnabled(true);
         }
     }
     
@@ -353,6 +393,9 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	
 	public void runSimulation(Simulator sim, Log log)
 	{
+		simulateButton.setEnabled(false);
+		this.update(getGraphics());
+		
 		//Run the simulation 
 		SimulationRunner sr = new SimulationRunner(sim, log);
 		try
@@ -364,6 +407,10 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 			e.printStackTrace();
 			System.exit(-1);
 		}
+		
+		setSummaryLabels(sim);
+		
+		simulateButton.setEnabled(true);
 	}
 
 	/*
@@ -380,6 +427,18 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		premiumProbTextField.setText(String.valueOf(Constants.DEFAULT_PREMIUM_PROB));
 		ecoProbTextField.setText(String.valueOf(Constants.DEFAULT_ECONOMY_PROB));
 		cancelProbTextField.setText(String.valueOf(Constants.DEFAULT_CANCELLATION_PROB));
+	}
+	
+	/*
+	 * Sets the text fields in the simulation page to their default values.
+	 */
+	private void setSummaryLabels(Simulator s)
+	{
+		ecoTotalLabel.setText("Total Economy: " + String.valueOf(s.getTotalEconomy()));
+		businessTotalLabel.setText("Total Business: " + String.valueOf(s.getTotalBusiness()));
+		premiumTotalLabel.setText("Total Premium: " + String.valueOf(s.getTotalPremium()));
+		firstTotalLabel.setText("Total First: " + String.valueOf(s.getTotalFirst()));
+		emptyTotalLabel.setText("Total Empty: " + String.valueOf(s.getTotalEmpty()));
 	}
 	
 	public void setSimulationParameters(String[] args)

@@ -163,8 +163,7 @@ public abstract class Passenger {
 		confirmed = true;
 		
 		this.confirmationTime = confirmationTime;
-		this.departureTime = departureTime;
-		
+		this.departureTime = departureTime;		
 	}
 
 	/**
