@@ -7,8 +7,10 @@
 package asgn2Aircraft;
 
 
+import java.io.Console;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.ConsoleHandler;
 
 //import com.sun.glass.ui.CommonDialogs.Type;
 
@@ -385,26 +387,39 @@ public abstract class Aircraft
 	public boolean seatsAvailable(Passenger p)
 	{
 		char fareClass = p.getPassID().charAt(0);
+		boolean result;
 		
 		switch (fareClass)
 		{
 			case 'F':
-				return (numFirst < firstCapacity);
+				result = (numFirst < firstCapacity);
+			break;
 
 			case 'J':
-				return (numBusiness < businessCapacity);
+				result = (numBusiness < businessCapacity);
+			break;
 
 			case 'P':
-				return (numPremium < premiumCapacity);
+				result = (numPremium < premiumCapacity);
+			break;
 
 			case 'Y':
-				return (numEconomy < economyCapacity);
+				result = (numEconomy < economyCapacity);
+			break;
 			
 			//Could occur when passenger doesn't have a seat
 			//or PassID is incorrectly formatted.
 			default:
-				return false;
+				result = false;
+			break;
 		}
+		
+		if (!result)
+		{
+			//System.out.println(p.noSeatsMsg());
+		}
+		
+		return result;
 	}
 
 	/* 

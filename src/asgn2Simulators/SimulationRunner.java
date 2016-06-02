@@ -73,7 +73,7 @@ public class SimulationRunner
 		}
 		
 		gui.run();
-		gui.runSimulation(s, l);
+		//gui.runSimulation(s, l);
 	}
 	
 	/**
