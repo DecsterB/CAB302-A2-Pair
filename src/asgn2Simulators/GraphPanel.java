@@ -25,8 +25,8 @@ public class GraphPanel {
 		String totalEmptyLabel  = "Empty";
 		//--Chart 1 Graph Settings------
 		String chart1Title = "Passengers vs Time by Class";
-		String chart1YAxis = "Number of Passengers";
-		String chart1XAxis = "time";
+		String chart1YAxis = "Day";
+		String chart1XAxis = "Number of Passengers";
 		PlotOrientation chart1Orientation = PlotOrientation.VERTICAL;
 		Boolean chart1Legend = true;
 		Boolean chart1ToolTips = true;

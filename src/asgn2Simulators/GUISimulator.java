@@ -400,7 +400,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener {
     	final double MIN_PROB = 0.0;
     	final double MAX_PROB = 1.0;
     	final int MIN_OTHER = 0;
-    	final int MAX_OTHER = 10000;
+    	final int MAX_OTHER = 50001;
 
     	Simulator s;    	
     	int seed = 0, maxQueue = 0;

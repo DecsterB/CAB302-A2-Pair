@@ -17,3 +17,24 @@ Statement of Agreement:
 Declan:
 I agree to this thing.
 
+
+Student Names:
+Matthew Baker, 
+
+Student IDs:
+N8317283, 
+
+Statement of Contribution:
+Matt:
+Passenger classes
+Aircraft testing
+GUI Tests implementation
+
+
+Statement of Completeness:
+Both the GUI and the text output can be seen within this project.
+Graph axis by myself (Matthew Baker) not displaying correctly
+
+Statement of Agreement:
+Matt:
+I also agree to this thing.
