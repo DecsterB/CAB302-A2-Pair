@@ -1,14 +1,11 @@
 package asgn2Tests;
 
 import static org.junit.Assert.*;
-//import java.util.Arrays;
 import org.junit.*;
-//import java.lang.reflect.*;
 
 import asgn2Aircraft.A380;
 import asgn2Aircraft.AircraftException;
 import asgn2Passengers.PassengerException;
-
 
 /**
  * @author Matt Baker
@@ -22,10 +19,6 @@ public class A380Tests {
 	int legalCancellationTime = 50;
 	String legalFlightCode = "TestFlightCode";
 	int legalClassSize = 10;
-	
-	
-	
-	
 	
 	@Before
 	public void setUp(){

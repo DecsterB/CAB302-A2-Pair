@@ -7,12 +7,9 @@ import org.junit.Test;
 
 import asgn2Passengers.Passenger;
 import asgn2Passengers.PassengerException;
-import asgn2Passengers.Economy;
 import asgn2Passengers.First;
 
-public class FirstTests
-{
-	//Dummy constants.
+public class FirstTests {
 	final int BOOKING_TIME = 10;
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
@@ -32,8 +29,7 @@ public class FirstTests
 	/*
 	 * Test 2: Constructing a First object.
 	 */
-	@Before @Test public void setUpPassenger() throws PassengerException
-	{
+	@Before @Test public void setUpPassenger() throws PassengerException {
 		first = new First(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("First patron is not flagged as new.", first.isNew(), true);
@@ -42,8 +38,7 @@ public class FirstTests
 	/*
 	 * Test 3: Confirming a first class seat.
 	 */
-	@Test public void confirmASeat() throws PassengerException
-	{
+	@Test public void confirmASeat() throws PassengerException {
 		first = new First(BOOKING_TIME, DEPARTURE_TIME);
 		
 		assertEquals("First patron should be new or queued.", first.isNew() || first.isQueued(), true);
@@ -59,8 +54,7 @@ public class FirstTests
 	/*
 	 * Test 4: Embark on a first class flight.
 	 */
-	@Test public void flyAway() throws PassengerException
-	{
+	@Test public void flyAway() throws PassengerException {
 		first = new First(BOOKING_TIME, DEPARTURE_TIME);
 		
 		first.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -77,8 +71,7 @@ public class FirstTests
 	/*
 	 * Test 5: Queue a first passenger.
 	 */
-	@Test public void queueAPassenger() throws PassengerException
-	{	
+	@Test public void queueAPassenger() throws PassengerException {	
 		first = new First(BOOKING_TIME, DEPARTURE_TIME);
 	 
 	 	assertEquals("First patron should be new.", first.isNew(), true);
@@ -94,8 +87,7 @@ public class FirstTests
 	/*
 	 * Test 6: Refuse an first passenger.
 	 */
-	@Test public void refusePassenger() throws PassengerException
-	{	
+	@Test public void refusePassenger() throws PassengerException {	
 		first = new First(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("First patron should be new or queued.", first.isNew() || first.isQueued(), true);

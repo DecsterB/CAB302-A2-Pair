@@ -8,9 +8,7 @@ import org.junit.Test;
 import asgn2Passengers.Economy;
 import asgn2Passengers.PassengerException;
 
-public class EconomyTests
-{
-	//Dummy constants.
+public class EconomyTests {
 	final int BOOKING_TIME = 10;
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
@@ -25,8 +23,7 @@ public class EconomyTests
 	/*
 	 * Test 1: Constructing a Economy object.
 	 */
-	@Before @Test public void setUpPassenger() throws PassengerException
-	{
+	@Before @Test public void setUpPassenger() throws PassengerException {
 		economy = new Economy(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("Economy patron is not flagged as new.", economy.isNew(), true);
@@ -35,8 +32,7 @@ public class EconomyTests
 	/*
 	 * Test 2: Confirm a seat.
 	 */
-	@Test public void confirmASeat() throws PassengerException
-	{
+	@Test public void confirmASeat() throws PassengerException {
 		assertEquals("Economy patron should be new or queued.", economy.isNew() || economy.isQueued(), true);
 
 		economy.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -50,8 +46,7 @@ public class EconomyTests
 	/*
 	 * Test 3: Embark on a flight.
 	 */
-	@Test public void flyAway() throws PassengerException
-	{
+	@Test public void flyAway() throws PassengerException {
 		economy = new Economy(BOOKING_TIME, DEPARTURE_TIME);
 		
 		economy.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -68,8 +63,7 @@ public class EconomyTests
 	/*
 	 * Test 4: Queue a passenger.
 	 */
-	@Test public void queueAPassenger() throws PassengerException
-	{	
+	@Test public void queueAPassenger() throws PassengerException {	
 		economy = new Economy(BOOKING_TIME, DEPARTURE_TIME);
 	 
 	 	assertEquals("Economy patron should be new.", economy.isNew(), true);
@@ -85,8 +79,7 @@ public class EconomyTests
 	/*
 	 * Test 5: Refuse an economy passenger.
 	 */
-	@Test public void refusePassenger() throws PassengerException
-	{	
+	@Test public void refusePassenger() throws PassengerException {	
 		economy = new Economy(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("Economy patron should be new or queued.", economy.isNew() || economy.isQueued(), true);

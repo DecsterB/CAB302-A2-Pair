@@ -20,8 +20,6 @@ public class Business extends Passenger {
 	 * @see asgnPassengers.Passenger#Passenger(int,int)
 	 */
 	public Business(int bookingTime, int departureTime) throws PassengerException {
-		//TODO: (Declan)
-		//See Economy constructor.
 		super(bookingTime, departureTime);
 		
 		this.passID = "J:" + this.passID;
@@ -45,7 +43,6 @@ public class Business extends Passenger {
 		First upgradePassenger = new First();
 		copyPassengerState(upgradePassenger);
 		
-		return upgradePassenger;
-		
+		return upgradePassenger;		
 	}
 }

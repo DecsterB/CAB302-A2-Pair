@@ -13,8 +13,7 @@ package asgn2Aircraft;
  * @author Declan Barker
  *
  */
-public class Bookings
-{	
+public class Bookings {	
 	private int numFirst;
 	private int numBusiness; 
 	private int numPremium;
@@ -30,8 +29,7 @@ public class Bookings
 	 * @param total <code>int</code> total number of passengers
 	 * @param available <code>int</code> number of seats available
 	 */
-	public Bookings(int numFirst, int numBusiness, int numPremium, int numEconomy, int total, int available)
-	{
+	public Bookings(int numFirst, int numBusiness, int numPremium, int numEconomy, int total, int available) {
 		this.numFirst = numFirst;
 		this.numBusiness = numBusiness;
 		this.numPremium = numPremium;
@@ -45,8 +43,7 @@ public class Bookings
 	 *  
 	 * @return <code>int</code> number of First Class passengers
 	 */
-	public int getNumFirst()
-	{
+	public int getNumFirst() {
 		return numFirst;
 	}
 
@@ -55,19 +52,16 @@ public class Bookings
 	 *  
 	 * @param numFirst <code>int</code> number of First Class passengers
 	 */
-	public void setNumFirst(int numFirst)
-	{
+	public void setNumFirst(int numFirst) {
 		this.numFirst = numFirst;
 	}
-
 
 	/**
 	 * Simple getter for number of Business Class passengers
 	 *  
 	 * @return <code>int</code> number of Business Class passengers
 	 */
-	public int getNumBusiness()
-	{
+	public int getNumBusiness() {
 		return numBusiness;
 	}
 
@@ -76,19 +70,16 @@ public class Bookings
 	 *  
 	 * @param numBusiness <code>int</code> number of Business Class passengers
 	 */
-	public void setNumBusiness(int numBusiness)
-	{
+	public void setNumBusiness(int numBusiness) {
 		this.numBusiness = numBusiness;
 	}
-
 
 	/**
 	 * Simple getter for number of Premium Economy Class passengers
 	 *  
 	 * @return <code>int</code> number of Premium Economy Class passengers
 	 */
-	public int getNumPremium()
-	{
+	public int getNumPremium() {
 		return numPremium;
 	}
 
@@ -97,8 +88,7 @@ public class Bookings
 	 *  
 	 * @param numPremium <code>int</code> number of Premium Economy Class passengers
 	 */
-	public void setNumPremium(int numPremium)
-	{
+	public void setNumPremium(int numPremium) {
 		this.numPremium = numPremium;
 	}
 
@@ -107,8 +97,7 @@ public class Bookings
 	 *  
 	 * @return <code>int</code> number of Economy Class passengers
 	 */
-	public int getNumEconomy()
-	{
+	public int getNumEconomy() {
 		return numEconomy;
 	}
 
@@ -117,8 +106,7 @@ public class Bookings
 	 *  
 	 * @param numEconomy <code>int</code> number of Economy Class passengers
 	 */
-	public void setNumEconomy(int numEconomy)
-	{
+	public void setNumEconomy(int numEconomy) {
 		this.numEconomy = numEconomy;
 	}
 
@@ -127,8 +115,7 @@ public class Bookings
 	 *  
 	 * @return <code>int</code> total number of passengers
 	 */
-	public int getTotal()
-	{
+	public int getTotal() {
 		return total;
 	}
 
@@ -137,8 +124,7 @@ public class Bookings
 	 *  
 	 * @param total <code>int</code> total number of passengers
 	 */
-	public void setTotal(int total)
-	{
+	public void setTotal(int total) {
 		this.total = total;
 	}
 
@@ -147,8 +133,7 @@ public class Bookings
 	 *  
 	 * @return <code>int</code> number of seats available
 	 */
-	public int getAvailable()
-	{
+	public int getAvailable() {
 		return available;
 	}
 
@@ -157,8 +142,7 @@ public class Bookings
 	 *  
 	 * @param available <code>int</code> number of seats available
 	 */
-	public void setAvailable(int available)
-	{
+	public void setAvailable(int available) {
 		this.available = available;
 	}
 }

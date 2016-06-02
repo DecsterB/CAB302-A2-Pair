@@ -13,7 +13,7 @@ import org.jfree.data.category.DefaultCategoryDataset;
 
 public class GraphPanel {
 
-		
+	
 	//Chart1 Values
 		DefaultCategoryDataset chart1Dataset;
 		//--Chart 1 datasets-------------
@@ -37,7 +37,7 @@ public class GraphPanel {
 		int prevTotalBusiness = 0;
 		int prevTotalFirst = 0;
 		int prevTotalBookings = 0;
-		int prevTotalEmpty;
+		int prevTotalEmpty = 0;
 		
 	
 	//Chart2 Values
@@ -53,27 +53,34 @@ public class GraphPanel {
 		Boolean chart2Legend = true;
 		Boolean chart2ToolTips = true;
 		Boolean chart2URLS = false;
+
+
+
+
 	
-		
-	
-	public GraphPanel(){
+	public GraphPanel() {
 			
 		chart1Dataset = new DefaultCategoryDataset();
 		chart2Dataset = new DefaultCategoryDataset();
 	}
 	
-	//Updates dataset with simulator stats and current time
-	public void UpdateChart( Simulator sim, int time ){
+	/**
+	 * Updates datasest with simulator stats and the current time.
+	 *
+	 * @param sim <code>Simulator</code>.
+	 * @param time <code>int</code>.
+	 */
+	public void UpdateChart(Simulator sim, int time) {
 		
 		String catTime = "" + time;
 		
-		//Add simulator values to chart1 dataset
-		
-		int dayTotalBookings = sim.getTotalBusiness() + 
+		//Add simulator values to chart 1 dataset.
+		int totalBookings = sim.getTotalBusiness() + 
 								sim.getTotalEconomy() + 
 								sim.getTotalFirst() + 
 								sim.getTotalPremium() -
 								prevTotalBookings;
+		
 		int dayTotalEconomy = sim.getTotalEconomy() - prevTotalEconomy;
 		int dayTotalPremium = sim.getTotalPremium() - prevTotalPremium;
 		int dayTotalBusiness = sim.getTotalBusiness() - prevTotalBusiness;
@@ -84,26 +91,34 @@ public class GraphPanel {
 		chart1Dataset.addValue(dayTotalPremium, totalPremiumLabel, catTime);
 		chart1Dataset.addValue(dayTotalBusiness, totalBusinessLabel, catTime);
 		chart1Dataset.addValue(dayTotalFirst, totalFirstLabel, catTime);
-		chart1Dataset.addValue(dayTotalBookings, totalTotalLabel, catTime);
+		chart1Dataset.addValue(totalBookings, totalTotalLabel, catTime);
 		chart1Dataset.addValue(dayTotalEmpty, totalEmptyLabel, catTime);
 		
-		
-		//Add simulator values to chart2 dataset
-		chart2Dataset.addValue(sim.numInQueue(), queued, catTime);
-		chart2Dataset.addValue(sim.numRefused(), refused, catTime);
 		
 		
 		prevTotalEconomy = sim.getTotalEconomy();
 		prevTotalPremium = sim.getTotalPremium();
 		prevTotalBusiness = sim.getTotalBusiness();
 		prevTotalFirst = sim.getTotalFirst();
-		prevTotalBookings = prevTotalEconomy +
-								prevTotalPremium +
-								prevTotalBusiness +
-								prevTotalFirst;
 		prevTotalEmpty = sim.getTotalEmpty();
+		
+		prevTotalBookings = prevTotalEconomy +
+				prevTotalPremium +
+				prevTotalBusiness +
+				prevTotalFirst;
+		
+
+		//Add simulator values to chart2 dataset.
+		chart2Dataset.addValue(sim.numInQueue(), queued, catTime);
+		chart2Dataset.addValue(sim.numRefused(), refused, catTime);
 	}
 	
+
+	/**
+	 * Generates the Class Passengers v. Time chart.
+	 * 
+	 * @return JFreeChart
+	 */
 	public JFreeChart GetChart1(){	
 		JFreeChart JFChart1 =  ChartFactory.createLineChart(chart1Title, chart1YAxis, chart1XAxis, 
 				chart1Dataset, chart1Orientation, chart1Legend, chart1ToolTips, chart1URLS);
@@ -136,5 +151,6 @@ public class GraphPanel {
 		
 		return JFChart2;
 	}
+	
 	
 }

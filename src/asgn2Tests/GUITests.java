@@ -10,8 +10,7 @@ import asgn2Simulators.Log;
 import asgn2Simulators.SimulationException;
 import asgn2Simulators.Simulator;
 
-public class GUITests
-{
+public class GUITests {
 	//Dummy test arguements.
 	final String ARGUEMENT_ZERO = "WINDOW TITLE";
 	
@@ -23,8 +22,7 @@ public class GUITests
 	/*
 	 * Test 1: Running a GUISimulator simulation.
 	 */
-	@Before @Test public void runASimulation() throws IOException, SimulationException
-	{		
+	@Before @Test public void runASimulation() throws IOException, SimulationException {		
 		Simulator s = new Simulator(); 		 
 		Log l = new Log();
 

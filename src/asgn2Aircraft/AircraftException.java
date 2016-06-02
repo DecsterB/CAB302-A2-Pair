@@ -13,16 +13,14 @@ package asgn2Aircraft;
  * @author Declan Barker 
  */
 @SuppressWarnings("serial") // We're not interested in binary i/o here
-public class AircraftException extends Exception
-{
+public class AircraftException extends Exception {
 	
 	/**
 	 * Creates a new instance of AircraftException.
 	 * 
 	 * @param message String holding an informative message about the problem encountered
 	 */
-	public AircraftException(String message)
-	{
+	public AircraftException(String message) {
 		super("Aircraft Exception: " + message);
 	}
 }

@@ -6,12 +6,9 @@ import org.junit.Before;
 import org.junit.Test;
 
 import asgn2Passengers.Business;
-import asgn2Passengers.Economy;
 import asgn2Passengers.PassengerException;
 
-public class BusinessTests
-{
-	//Dummy constants.
+public class BusinessTests {
 	final int BOOKING_TIME = 10;
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
@@ -26,8 +23,7 @@ public class BusinessTests
 	/*
 	 * Test 1: Constructing a Business object.
 	 */
-	@Before @Test public void setUpPassenger() throws PassengerException
-	{
+	@Before @Test public void setUpPassenger() throws PassengerException {
 		business = new Business(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("Business patron is not flagged as new.", business.isNew(), true);
@@ -36,8 +32,7 @@ public class BusinessTests
 	/*
 	 * Test 2: Confirming a business class seat.
 	 */
-	@Test public void confirmASeat() throws PassengerException
-	{
+	@Test public void confirmASeat() throws PassengerException {
 		assertEquals("Business patron should be new or queued.", business.isNew() || business.isQueued(), true);
 
 		business.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -51,8 +46,7 @@ public class BusinessTests
 	/*
 	 * Test 3: Embark on a business class flight.
 	 */
-	@Test public void flyAway() throws PassengerException
-	{
+	@Test public void flyAway() throws PassengerException {
 		business = new Business(BOOKING_TIME, DEPARTURE_TIME);
 		
 		business.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -69,8 +63,7 @@ public class BusinessTests
 	/*
 	 * Test 4: Queue a business passenger.
 	 */
-	@Test public void queueAPassenger() throws PassengerException
-	{	
+	@Test public void queueAPassenger() throws PassengerException {	
 		business = new Business(BOOKING_TIME, DEPARTURE_TIME);
 	 
 	 	assertEquals("Business patron should be new.", business.isNew(), true);
@@ -86,8 +79,7 @@ public class BusinessTests
 	/*
 	 * Test 5: Refuse an business passenger.
 	 */
-	@Test public void refusePassenger() throws PassengerException
-	{	
+	@Test public void refusePassenger() throws PassengerException {	
 		business = new Business(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("Business patron should be new or queued.", business.isNew() || business.isQueued(), true);

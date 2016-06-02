@@ -5,13 +5,10 @@ import static org.junit.Assert.*;
 import org.junit.Before;
 import org.junit.Test;
 
-import asgn2Passengers.Economy;
 import asgn2Passengers.PassengerException;
 import asgn2Passengers.Premium;
 
-public class PremiumTests
-{
-	//Dummy constants.
+public class PremiumTests {
 	final int BOOKING_TIME = 10;
 	final int DEPARTURE_TIME = 10;
 	final int CONFIRMATION_TIME = 10;
@@ -26,8 +23,7 @@ public class PremiumTests
 	/*
 	 * Test 1: Constructing a Premium object.
 	 */
-	@Before @Test public void setUpPassenger() throws PassengerException
-	{
+	@Before @Test public void setUpPassenger() throws PassengerException {
 		premium = new Premium(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("Premium patron is not flagged as new.", premium.isNew(), true);
@@ -36,8 +32,7 @@ public class PremiumTests
 	/*
 	 * Test 2: Confirming a premium class seat.
 	 */
-	@Test public void confirmASeat() throws PassengerException
-	{
+	@Test public void confirmASeat() throws PassengerException {
 		assertEquals("Premium patron should be new or queued.", premium.isNew() || premium.isQueued(), true);
 
 		premium.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -51,8 +46,7 @@ public class PremiumTests
 	/*
 	 * Test 3: Embark on a premium class flight.
 	 */
-	@Test public void flyAway() throws PassengerException
-	{
+	@Test public void flyAway() throws PassengerException {
 		premium = new Premium(BOOKING_TIME, DEPARTURE_TIME);
 		
 		premium.confirmSeat(CONFIRMATION_TIME, DEPARTURE_TIME);
@@ -69,8 +63,7 @@ public class PremiumTests
 	/*
 	 * Test 4: Queue a premium passenger.
 	 */
-	@Test public void queueAPassenger() throws PassengerException
-	{	
+	@Test public void queueAPassenger() throws PassengerException {	
 		premium = new Premium(BOOKING_TIME, DEPARTURE_TIME);
 	 
 	 	assertEquals("Premium patron should be new.", premium.isNew(), true);
@@ -86,8 +79,7 @@ public class PremiumTests
 	/*
 	 * Test 5: Refuse a premium passenger.
 	 */
-	@Test public void refusePassenger() throws PassengerException
-	{	
+	@Test public void refusePassenger() throws PassengerException {	
 		premium = new Premium(BOOKING_TIME, DEPARTURE_TIME);
 
 		assertEquals("Premium patron should be new or queued.", premium.isNew() || premium.isQueued(), true);
