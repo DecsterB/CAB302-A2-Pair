@@ -12,6 +12,7 @@ import java.awt.Dimension;
 import java.awt.GridLayout;
 import java.awt.HeadlessException;
 import java.awt.Point;
+import java.awt.Rectangle;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
@@ -42,12 +43,17 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 	
 	//Action commands.
 	private static final String VIEWLIST_COMMAND = "view";
-	private static final String PAGELIST_COMMAND = "page";
+	private static final String PANELIST_COMMAND = "page";
 	private static final String SIMULATE_COMMAND = "simulate";
 	
-	//Panes and child objects.
+	//Panes.
+	private static final String[] PaneNames = { "SIMULATION_PANE", "PROGRESS_PANE", "SUMMARY_PANE" };
+	private int currentPaneIndex;
+	
+	//Pane child objects
 	JLayeredPane viewPane, mainPane;
-	JComboBox viewList, pageList;
+	JComboBox viewList, paneList;
+	JButton simulateButton;
 	JTextField seedTextField, maxQueueTextField,
 	meanBookTextField, bookSDTextField, firstProbTextField,
 	businessProbTextField, premiumProbTextField, ecoProbTextField,
@@ -65,7 +71,8 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		{
 			//TODO: Special case logic here.
 		}
-		
+
+		currentPaneIndex = 0;
 		createGUI();
 	}
 	
@@ -115,25 +122,42 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         origin.x += 100;
         
         //Page combo box.
-        String pageListOptions[] = {"Simulation", "Progress", "Summary"};
-        pageList = new JComboBox(pageListOptions);
-        pageList.setBounds(origin.x, origin.y, 200, 25);
-        viewPane.add(pageList);
+        String paneListOptions[] = {"Simulation", "Progress", "Summary"};
+        paneList = new JComboBox(paneListOptions);
+        paneList.setBounds(origin.x, origin.y, 200, 25);
+        viewPane.add(paneList);
         
-        pageList.setSelectedIndex(0);
-        pageList.setActionCommand(PAGELIST_COMMAND);
-        pageList.addActionListener(this);
+        paneList.setSelectedIndex(0);
+        paneList.setActionCommand(PANELIST_COMMAND);
+        paneList.addActionListener(this);
         
         //Add the view pane to the window.
         getContentPane().add(viewPane);
 	}
 	
-	public void createSimulationPane()
+	private JTextField addLabelledInput(JLayeredPane pane, String labelText, Rectangle bounds)
 	{
-		Point origin = new Point(15, 15);
+		JTextField textField;
+		
+        JLabel aLabel = new JLabel(labelText);
+        aLabel.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        pane.add(aLabel);
         
+        bounds.y += bounds.height;
+        
+        textField = new JTextField();
+        textField.setBounds(bounds.x, bounds.y, bounds.width, bounds.height);
+        
+        return textField;
+	}
+	
+	public void createSimulationPane()
+	{    
+		final int ORIGIN_X = 15;
+		final int ORIGIN_Y = 15;
 		final int TEXT_WIDTH = 180;
 		final int TEXT_HEIGHT = 25;
+		Rectangle bounds = new Rectangle(ORIGIN_X, ORIGIN_Y, TEXT_WIDTH, TEXT_HEIGHT);
 		
 		//Create the simulation pane.
 		mainPane = new JLayeredPane();
@@ -141,134 +165,53 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 		mainPane.setBorder(BorderFactory.createTitledBorder("Simulation: "));
 		
 		//Seed text box and label.
-        JLabel seedLabel = new JLabel("Seed: ");
-        seedLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(seedLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        seedTextField = new JTextField();
-        seedTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(seedTextField);
-        
-        origin.y -= TEXT_HEIGHT;
-        origin.x += TEXT_WIDTH;
+        seedTextField = addLabelledInput(mainPane, "Seed: ", bounds);
+        mainPane.add(seedTextField);        
+        bounds.setLocation(bounds.x + TEXT_WIDTH, bounds.y - TEXT_HEIGHT);
 
         //Maximum queue text box and label.
-        JLabel maxQueueLabel = new JLabel("Max Queue Size: ");
-        maxQueueLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(maxQueueLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        maxQueueTextField = new JTextField();
-        maxQueueTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(maxQueueTextField);
-        
-        origin.y += TEXT_HEIGHT;
-        origin.x = 15;
+        maxQueueTextField = addLabelledInput(mainPane, "Max Queue Size: ", bounds);
+        mainPane.add(maxQueueTextField);        
+        bounds.setLocation(bounds.x + TEXT_WIDTH, bounds.y - TEXT_HEIGHT);
         
 		//Daily booking mean text box and label.
-        JLabel meanBookLabel = new JLabel("Daily Booking Mean: ");
-        meanBookLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(meanBookLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        meanBookTextField = new JTextField();
-        meanBookTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(meanBookTextField);
-
-        origin.y -= TEXT_HEIGHT;
-        origin.x += TEXT_WIDTH;
+        meanBookTextField = addLabelledInput(mainPane, "Daily Booking Mean: ", bounds);
+        mainPane.add(meanBookTextField);        
+        bounds.setLocation(ORIGIN_X, bounds.y + TEXT_HEIGHT);
         
 		//Daily booking SD text box and label.
-        JLabel bookSDLabel = new JLabel("Daily Booking SD: ");
-        bookSDLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(bookSDLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        bookSDTextField = new JTextField();
-        bookSDTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(bookSDTextField);
-        
-        origin.y -= TEXT_HEIGHT;
-        origin.x += TEXT_WIDTH;
+        bookSDTextField = addLabelledInput(mainPane, "Daily Booking SD: ", bounds);
+        mainPane.add(bookSDTextField);        
+        bounds.setLocation(bounds.x + TEXT_WIDTH, bounds.y - TEXT_HEIGHT);
           
 		//First class probability text box and label.
-        JLabel firstProbLabel = new JLabel("First Class Probability: ");
-        firstProbLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(firstProbLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        firstProbTextField = new JTextField();
-        firstProbTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(firstProbTextField);
-        
-        origin.y += TEXT_HEIGHT;
-        origin.x = 15;
+        firstProbTextField = addLabelledInput(mainPane, "First Class Probability: ", bounds);
+        mainPane.add(firstProbTextField);        
+        bounds.setLocation(bounds.x + TEXT_WIDTH, bounds.y - TEXT_HEIGHT);
         
 		//Business class probability text box and label.
-        JLabel businessProbLabel = new JLabel("Business Class Probability: ");
-        businessProbLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(businessProbLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        businessProbTextField = new JTextField();
-        businessProbTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(businessProbTextField);
-        
-        origin.y -= TEXT_HEIGHT;
-        origin.x += TEXT_WIDTH;
+        businessProbTextField = addLabelledInput(mainPane, "Business Class Probability: ", bounds);
+        mainPane.add(businessProbTextField);        
+        bounds.setLocation(ORIGIN_X, bounds.y + TEXT_HEIGHT);
         
 		//Premium class probability text box and label.
-        JLabel premiumProbLabel = new JLabel("Premium Class Probability: ");
-        premiumProbLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(premiumProbLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        premiumProbTextField = new JTextField();
-        premiumProbTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(premiumProbTextField);
-        
-        origin.y += TEXT_HEIGHT;
-        origin.x = 15;
+        premiumProbTextField = addLabelledInput(mainPane, "Premium Class Probability: ", bounds);
+        mainPane.add(premiumProbTextField);        
+        bounds.setLocation(bounds.x + TEXT_WIDTH, bounds.y - TEXT_HEIGHT);
         
 		//Economy class probability text box and label.
-        JLabel ecoProbLabel = new JLabel("Economy Class Probability: ");
-        ecoProbLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(ecoProbLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        ecoProbTextField = new JTextField();
-        ecoProbTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(ecoProbTextField);
-        
-        origin.y -= TEXT_HEIGHT;
-        origin.x += TEXT_WIDTH;
+        ecoProbTextField = addLabelledInput(mainPane, "Economy Class Probability: ", bounds);
+        mainPane.add(ecoProbTextField);        
+        bounds.setLocation(bounds.x + TEXT_WIDTH, bounds.y - TEXT_HEIGHT);
         
 		//Cancellation probability text box and label.
-        JLabel cancelProbLabel = new JLabel("Cancellation Probability: ");
-        cancelProbLabel.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(cancelProbLabel);
-        
-        origin.y += TEXT_HEIGHT;
-        
-        cancelProbTextField = new JTextField();
-        cancelProbTextField.setBounds(origin.x, origin.y, TEXT_WIDTH, TEXT_HEIGHT);
-        mainPane.add(cancelProbTextField);
-        
-        origin.y -= TEXT_HEIGHT;
-        origin.x += TEXT_WIDTH;
+        cancelProbTextField = addLabelledInput(mainPane, "Cancellation Probability: ", bounds);
+        mainPane.add(cancelProbTextField);        
+        bounds.setLocation(bounds.x + TEXT_WIDTH, bounds.y);
         
 		//Simulate button.
-        JButton simulateButton = new JButton("Simulate!");
-        simulateButton.setBounds(origin.x, origin.y, TEXT_WIDTH, 150);
+        simulateButton = new JButton("Simulate");
+        simulateButton.setBounds(bounds.x - (TEXT_WIDTH * 2), bounds.y + TEXT_HEIGHT, TEXT_WIDTH, 125);
         mainPane.add(simulateButton);  
         
         simulateButton.setActionCommand(SIMULATE_COMMAND);
@@ -281,6 +224,31 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
         getContentPane().add(mainPane);
 	}
 	
+	private void setPaneVisible(String paneName, boolean hide)
+	{
+		switch (paneName)
+		{
+			case "SIMULATION_PANE":
+	        	mainPane.setVisible(hide);   
+			break;
+
+			case "PROGRESS_PANE":	
+	        	//mainPane.setVisible(hide);   
+			break;
+			
+			case "SUMMARY_PANE":	
+	        	//mainPane.setVisible(hide);   
+			break;			
+				
+			default:
+				//TODO: Throw an error here because we have
+				//gone to an undefined pane.
+			break;
+		}
+	}
+	
+	
+	
     /*
      * Component events.
      */
@@ -288,17 +256,17 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     {
         String cmd = e.getActionCommand();
  
-        if (cmd.contentEquals(VIEWLIST_COMMAND))
+        if (cmd.contentEquals(PANELIST_COMMAND))
         {
-        	int index = viewList.getSelectedIndex();
-        	if (index == 0)
-        	{
-            	viewList.setBackground(Color.BLUE);        		
-        	}
-        	else if (index == 1)
-        	{
-            	viewList.setBackground(Color.GREEN);        		
-        	}
+        	//Get the index of the pane we are switching to.
+        	int newIndex = paneList.getSelectedIndex();
+
+        	//Hide pane at the index we are switching away from.
+        	setPaneVisible(PaneNames[currentPaneIndex], false);
+        	currentPaneIndex = newIndex;
+        	
+        	//Switching to new pane.
+        	setPaneVisible(PaneNames[newIndex], true);    		
         }
         else if (cmd.contentEquals(SIMULATE_COMMAND))
         {
@@ -307,7 +275,7 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
     		
 			try
 			{
-	        	//TODO: Get and verify integers from the simulate page.
+	        	//Get and verify simulation parameters from the simulate page.
 				s = parseSimulationPage();
 			}
 			catch (SimulationException e1)
@@ -324,7 +292,11 @@ public class GUISimulator extends JFrame implements Runnable, ActionListener
 				e1.printStackTrace();
 			}
 
+			simulateButton.setEnabled(false);
+			this.update(getGraphics());
+			
     		this.runSimulation(s, l);
+			simulateButton.setEnabled(true);
         }
     }
     
