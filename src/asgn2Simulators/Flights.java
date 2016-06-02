@@ -25,8 +25,7 @@ import asgn2Passengers.PassengerException;
  * 
  * @author Declan Barker
  */
-public class Flights
-{
+public class Flights {
 	private List<Aircraft> daily;
 	private Bookings counts; 
 
@@ -35,8 +34,7 @@ public class Flights
 	 * 
 	 * @throws AircraftException if problems with arguments to the {@link asgn2Aircraft.Aircraft} constructor. 
 	 */
-	public Flights(int time) throws AircraftException
-	{
+	public Flights(int time) throws AircraftException {
 		this.daily = createDailyServices(time); 
 		this.counts = null; 
 	}
@@ -50,12 +48,9 @@ public class Flights
 	 * @throws AircraftException See {@link asgn2Aircraft.Aircraft#confirmBooking(Passenger, int)}
 	 * @throws PassengerException See {@link asgn2Aircraft.Aircraft#confirmBooking(Passenger, int)}
 	 */
-	public void addPassenger(Passenger p,int time) throws AircraftException, PassengerException
-	{
-		for (Aircraft a : this.daily)
-		{
-			if (a.seatsAvailable(p))
-			{
+	public void addPassenger(Passenger p,int time) throws AircraftException, PassengerException {
+		for (Aircraft a : this.daily) {
+			if (a.seatsAvailable(p)) {
 				a.confirmBooking(p, time);
 				break; 
 			}
@@ -72,18 +67,14 @@ public class Flights
 	 * @throws PassengerException See {@link asgn2Aircraft.Aircraft#cancelBooking(Passenger, int)}
 	 * @throws AircraftException See {@link asgn2Aircraft.Aircraft#cancelBooking(Passenger, int)}
 	 */
-	public List<Passenger> cancelBookings(Random rng,double cancelProb,int cancelTime) throws PassengerException, AircraftException
-	{
+	public List<Passenger> cancelBookings(Random rng,double cancelProb,int cancelTime) throws PassengerException, AircraftException {
 		List<Passenger> cancelled = new ArrayList<Passenger>(); 
-		for (Aircraft a : this.daily)
-		{
+		for (Aircraft a : this.daily) {
 			Iterator<Passenger> iter =  a.getPassengers().iterator();
-			while (iter.hasNext())
-			{
+			while (iter.hasNext()) {
 				Passenger p = iter.next();
 				
-				if (Simulator.randomSuccess(rng, cancelProb))
-				{
+				if (Simulator.randomSuccess(rng, cancelProb)) {
 					a.cancelBooking(p, cancelTime);
 					cancelled.add(p);
 					iter.remove();
@@ -100,10 +91,8 @@ public class Flights
 	 * @param time <code>int</code> time operation performed
 	 * @throws PassengerException See {@link asgn2Aircraft.Aircraft#flyPassengers(int)}
 	 */
-	public void flyPassengers(int time) throws PassengerException
-	{
-		for (Aircraft a : this.daily)
-		{
+	public void flyPassengers(int time) throws PassengerException {
+		for (Aircraft a : this.daily) {
 			a.flyPassengers(time);
 		}
 	}
@@ -113,8 +102,7 @@ public class Flights
 	 *  
 	 * @return <code>Bookings</code> object containing the counts
 	 */
-	public Bookings getCurrentCounts()
-	{
+	public Bookings getCurrentCounts() {
 		this.totalFlightCounts();
 		return counts;
 	}
@@ -127,11 +115,9 @@ public class Flights
 	 * @param time <code>int<code> current time step 
 	 * @return <code>String</code> concatenating Aircraft status information  
 	 */
-	public String getStatus(int time)
-	{
+	public String getStatus(int time) {
 		String str = "";
-		for (Aircraft a : this.daily)
-		{
+		for (Aircraft a : this.daily) {
 			str += a.getStatus(time);
 		}
 		
@@ -144,11 +130,9 @@ public class Flights
 	 *  
 	 * @return <code>String</code> concatenating Aircraft initial state information  
 	 */
-	public String initialState()
-	{
+	public String initialState() {
 		String str = "";
-		for (Aircraft a : this.daily)
-		{
+		for (Aircraft a : this.daily) {
 			str += a.initialState() + "\n";
 		}
 		
@@ -162,13 +146,10 @@ public class Flights
 	 * @param p <code>Passenger</code> to be Confirmed
 	 * @return <code>boolean</code> true if seats in Class(p); false otherwise
 	 */
-	public boolean seatsAvailable(Passenger p)
-	{
+	public boolean seatsAvailable(Passenger p) {
 		boolean status = false; 
-		for (Aircraft a : this.daily)
-		{
-			if (a.seatsAvailable(p)) 
-			{
+		for (Aircraft a : this.daily) {
+			if (a.seatsAvailable(p)) {
 				status = true;
 				break; 
 			}
@@ -182,11 +163,9 @@ public class Flights
 	 * @see java.lang.Object#toString()
 	 */
 	@Override
-	public String toString()
-	{
+	public String toString() {
 		String str = "";
-		for (Aircraft a : this.daily)
-		{
+		for (Aircraft a : this.daily) {
 			str += a.toString() + "\n";
 		}
 		
@@ -198,10 +177,8 @@ public class Flights
 	 *  Passengers are upgraded solely within their original aircraft. We do 
 	 *  not move passengers between flights in the schedule. 
 	 */
-	public void upgradePassengers()
-	{
-		for (Aircraft a : this.daily)
-		{
+	public void upgradePassengers() {
+		for (Aircraft a : this.daily) {
 			a.upgradeBookings();
 		}		
 	}
@@ -213,8 +190,7 @@ public class Flights
 	 * @return list of created Aircraft 
 	 * @throws AircraftException if problems with arguments to the  {@link asgn2Aircraft.Aircraft} constructor. 
 	 */
-	private List<Aircraft> createDailyServices(int time) throws AircraftException
-	{
+	private List<Aircraft> createDailyServices(int time) throws AircraftException {
 		List<Aircraft> al = new ArrayList<Aircraft>();
 		
 		al.add(new A380("QF11",time)); 
@@ -227,11 +203,9 @@ public class Flights
 	/**
 	 * Helper to total passenger counts across all aircraft in the schedule 
 	 */
-	private void totalFlightCounts()
-	{
+	private void totalFlightCounts() {
 		this.counts = new Bookings(0,0,0,0,0,0);
-		for (Aircraft a : this.daily)
-		{
+		for (Aircraft a : this.daily) {
 			Bookings b = a.getBookings();
 			
 			int first = this.counts.getNumFirst();

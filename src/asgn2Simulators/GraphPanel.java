@@ -20,7 +20,7 @@ public class GraphPanel {
 	String totalEmpty = "Empty";
 	
 	/*
-	 * Chart 1 Graph Settings------
+	 * Chart 1 Graph Settings
 	 */
 	String chart1Title = "Class Passengers vs Time";
 	String chart1YAxis = "Number of Passengers";
@@ -29,7 +29,6 @@ public class GraphPanel {
 	Boolean chart1Legend = true;
 	Boolean chart1ToolTips = true;
 	Boolean chart1URLS = false;
-	
 
 	/*
 	 * Chart2 datasets
@@ -61,7 +60,7 @@ public class GraphPanel {
 	 * @param sim <code>Simulator</code>.
 	 * @param time <code>int</code>.
 	 */
-	public void UpdateChart( Simulator sim, int time) {
+	public void UpdateChart(Simulator sim, int time) {
 		
 		String catTime = "" + time;
 		

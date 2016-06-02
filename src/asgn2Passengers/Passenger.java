@@ -75,7 +75,7 @@ public abstract class Passenger {
 		//Stuff here 
 		
 		//Argument validation
-		if (bookingTime < 0){
+		if (bookingTime < 0) {
 			throw new PassengerException("Invalid booking time, must be equal to or greater than 0");
 		}
 		
